@@ -1,0 +1,151 @@
+﻿<UserControl x:Class="RuneRepo.NewRunePageItem"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:local="clr-namespace:RuneRepo"
+             mc:Ignorable="d" 
+             d:DesignHeight="277" d:DesignWidth="176" Height="277" Width="176" Margin="14">
+    <UserControl.Triggers>
+        <EventTrigger RoutedEvent="UserControl.MouseEnter">
+            <BeginStoryboard>
+                <Storyboard>
+                    <Storyboard>
+                        <ThicknessAnimation Storyboard.TargetName="BackgroundGrid" Storyboard.TargetProperty="Margin" BeginTime="00:00:00.000" Duration="00:00:00.200" To="0">
+                            <ThicknessAnimation.EasingFunction>
+                                <CubicEase EasingMode="EaseOut"/>
+                            </ThicknessAnimation.EasingFunction>
+                        </ThicknessAnimation>
+                        <DoubleAnimation Storyboard.TargetName="InfoBorder" Storyboard.TargetProperty="Opacity" BeginTime="00:00:00.000" Duration="00:00:00.200" To="1">
+                            <DoubleAnimation.EasingFunction>
+                                <CubicEase EasingMode="EaseOut"/>
+                            </DoubleAnimation.EasingFunction>
+                        </DoubleAnimation>
+                        <DoubleAnimation Storyboard.TargetName="SpitlineStop" Storyboard.TargetProperty="Offset" BeginTime="00:00:00.000" Duration="00:00:00.200" To="0">
+                            <DoubleAnimation.EasingFunction>
+                                <CubicEase EasingMode="EaseOut"/>
+                            </DoubleAnimation.EasingFunction>
+                        </DoubleAnimation>
+                    </Storyboard>
+                </Storyboard>
+            </BeginStoryboard>
+        </EventTrigger>
+        <EventTrigger RoutedEvent="UserControl.MouseLeave">
+            <BeginStoryboard>
+                <Storyboard>
+                    <Storyboard>
+                        <ThicknessAnimation Storyboard.TargetName="BackgroundGrid" Storyboard.TargetProperty="Margin" BeginTime="00:00:00.000" Duration="00:00:00.200" To="-3">
+                            <ThicknessAnimation.EasingFunction>
+                                <CubicEase EasingMode="EaseOut"/>
+                            </ThicknessAnimation.EasingFunction>
+                        </ThicknessAnimation>
+                        <DoubleAnimation Storyboard.TargetName="InfoBorder" Storyboard.TargetProperty="Opacity" BeginTime="00:00:00.000" Duration="00:00:00.200" To="0">
+                            <DoubleAnimation.EasingFunction>
+                                <CubicEase EasingMode="EaseOut"/>
+                            </DoubleAnimation.EasingFunction>
+                        </DoubleAnimation>
+                        <DoubleAnimation Storyboard.TargetName="SpitlineStop" Storyboard.TargetProperty="Offset" BeginTime="00:00:00.000" Duration="00:00:00.200" To="1">
+                            <DoubleAnimation.EasingFunction>
+                                <CubicEase EasingMode="EaseOut"/>
+                            </DoubleAnimation.EasingFunction>
+                        </DoubleAnimation>
+                    </Storyboard>
+                </Storyboard>
+            </BeginStoryboard>
+        </EventTrigger>
+    </UserControl.Triggers>
+    <Grid ClipToBounds="True">
+        <Grid x:Name="BackgroundGrid" Margin="-3">
+            <Grid.Background>
+                <RadialGradientBrush>
+                    <GradientStop Color="#17181a" Offset="0"/>
+                    <GradientStop Color="#111114" Offset="1"/>
+                </RadialGradientBrush>
+            </Grid.Background>
+            <Grid Margin="3">
+                <Grid.Background>
+                    <VisualBrush>
+                        <VisualBrush.Visual>
+                            <Grid Height="277" Width="176" Background="Transparent">
+                                <Path Stroke="#b6af95" StrokeThickness="3" StrokeLineJoin="Miter">
+                                    <Path.Data>
+                                        <GeometryGroup>
+                                            <PathGeometry>
+                                                <PathFigure StartPoint="88,78" IsClosed="True">
+                                                    <LineSegment Point="43,123"/>
+                                                    <LineSegment Point="88,168"/>
+                                                    <LineSegment Point="133,123"/>
+                                                </PathFigure>
+                                            </PathGeometry>
+                                        </GeometryGroup>
+                                    </Path.Data>
+                                </Path>
+                                <Path Fill="#b6af95">
+                                    <Path.Data>
+                                        <GeometryGroup>
+                                            <PathGeometry>
+                                                <PathFigure StartPoint="84,106" IsClosed="True">
+                                                    <LineSegment Point="84,119"/>
+                                                    <LineSegment Point="71,119"/>
+                                                    <LineSegment Point="71,127"/>
+                                                    <LineSegment Point="84,127"/>
+                                                    <LineSegment Point="84,140"/>
+                                                    <LineSegment Point="92,140"/>
+                                                    <LineSegment Point="92,127"/>
+                                                    <LineSegment Point="105,127"/>
+                                                    <LineSegment Point="105,119"/>
+                                                    <LineSegment Point="92,119"/>
+                                                    <LineSegment Point="92,106"/>
+                                                </PathFigure>
+                                            </PathGeometry>
+                                        </GeometryGroup>
+                                    </Path.Data>
+                                </Path>
+                            </Grid>
+                        </VisualBrush.Visual>
+                    </VisualBrush>
+                </Grid.Background>
+            </Grid>
+        </Grid>
+        <Rectangle>
+            <Rectangle.Fill>
+                <LinearGradientBrush StartPoint="0,0" EndPoint="0,1">
+                    <GradientStop Color="#00000000" Offset="0.0"/>
+                    <GradientStop Color="#00000000" Offset="0.25"/>
+                    <GradientStop Color="#ff000000" Offset="1.0"/>
+                </LinearGradientBrush>
+            </Rectangle.Fill>
+        </Rectangle>
+        <Border x:Name="InfoBorder" BorderThickness="1" Background="#99000000" Opacity="1">
+            <Border.BorderBrush>
+                <LinearGradientBrush StartPoint="0,0" EndPoint="1,1">
+                    <GradientStop Color="#fdfdfd" Offset="0.0"/>
+                    <GradientStop Color="#c7a96f" Offset="1.0"/>
+                </LinearGradientBrush>
+            </Border.BorderBrush>
+            <Grid>
+                <local:TextButton x:Name="StoreBtn" Text="Store New" Clicked="StoreBtn_Clicked"/>
+
+            </Grid>
+        </Border>
+        <Grid Height="75" HorizontalAlignment="Stretch" VerticalAlignment="Bottom" Margin="15,0,0,0">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="25"/>
+                <RowDefinition Height="0.6"/>
+                <RowDefinition Height="*"/>
+            </Grid.RowDefinitions>
+            <TextBlock x:Name="NameBox" Text="New Page" Foreground="#eae0cd" FontWeight="Bold"/>
+            <Grid Grid.Row="1">
+                <Grid.Background>
+                    <LinearGradientBrush StartPoint="0,0" EndPoint="1,0">
+                        <GradientStop Color="#50fdfdfd" Offset="0.0"/>
+                        <GradientStop x:Name="SpitlineStop" Color="#50fdfdfd" Offset="1"/>
+                        <GradientStop Color="#c7a96f" Offset="{Binding ElementName=SpitlineStop, Path=Offset}"/>
+                        <GradientStop Color="#c7a96f" Offset="1.0"/>
+                    </LinearGradientBrush>
+                </Grid.Background>
+            </Grid>
+        </Grid>
+
+    </Grid>
+</UserControl>

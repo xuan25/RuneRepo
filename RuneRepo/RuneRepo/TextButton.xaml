@@ -1,0 +1,76 @@
+﻿<UserControl x:Class="RuneRepo.TextButton"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:local="clr-namespace:RuneRepo"
+             mc:Ignorable="d" 
+             d:DesignHeight="32" d:DesignWidth="78" Height="32" Width="78">
+    <Grid x:Name="ButtonGrid" Cursor="Hand" MouseLeftButtonDown="ButtonGrid_MouseLeftButtonDown" MouseLeftButtonUp="ButtonGrid_MouseLeftButtonUp">
+        <Grid.Triggers>
+            <EventTrigger RoutedEvent="Grid.MouseEnter">
+                <BeginStoryboard>
+                    <Storyboard>
+                        <ColorAnimation Storyboard.TargetName="BorderBrushTop" Storyboard.TargetProperty="Color" Duration="00:00:00.100" To="#f0e5d6">
+                            <ColorAnimation.EasingFunction>
+                                <CubicEase EasingMode="EaseOut"/>
+                            </ColorAnimation.EasingFunction>
+                        </ColorAnimation>
+                        <ColorAnimation Storyboard.TargetName="BorderBrushBot" Storyboard.TargetProperty="Color" Duration="00:00:00.100" To="#c89c3d">
+                            <ColorAnimation.EasingFunction>
+                                <CubicEase EasingMode="EaseOut"/>
+                            </ColorAnimation.EasingFunction>
+                        </ColorAnimation>
+                        <ColorAnimation Storyboard.TargetName="ButtonTextBox" Storyboard.TargetProperty="Foreground.Color" Duration="00:00:00.100" To="#f0e6d2">
+                            <ColorAnimation.EasingFunction>
+                                <CubicEase EasingMode="EaseOut"/>
+                            </ColorAnimation.EasingFunction>
+                        </ColorAnimation>
+                    </Storyboard>
+                </BeginStoryboard>
+            </EventTrigger>
+            <EventTrigger RoutedEvent="Grid.MouseLeave">
+                <BeginStoryboard>
+                    <Storyboard>
+                        <ColorAnimation Storyboard.TargetName="BorderBrushTop" Storyboard.TargetProperty="Color" Duration="00:00:00.100" To="#c8aa6d">
+                            <ColorAnimation.EasingFunction>
+                                <CubicEase EasingMode="EaseOut"/>
+                            </ColorAnimation.EasingFunction>
+                        </ColorAnimation>
+                        <ColorAnimation Storyboard.TargetName="BorderBrushBot" Storyboard.TargetProperty="Color" Duration="00:00:00.100" To="#795c28">
+                            <ColorAnimation.EasingFunction>
+                                <CubicEase EasingMode="EaseOut"/>
+                            </ColorAnimation.EasingFunction>
+                        </ColorAnimation>
+                        <ColorAnimation Storyboard.TargetName="ButtonTextBox" Storyboard.TargetProperty="Foreground.Color" Duration="00:00:00.100" To="#cdbe91">
+                            <ColorAnimation.EasingFunction>
+                                <CubicEase EasingMode="EaseOut"/>
+                            </ColorAnimation.EasingFunction>
+                        </ColorAnimation>
+                    </Storyboard>
+                </BeginStoryboard>
+            </EventTrigger>
+        </Grid.Triggers>
+        <Border BorderThickness="2" Background="#1e2328">
+            <Border.BorderBrush>
+                <LinearGradientBrush StartPoint="0,0" EndPoint="0,1">
+                    <GradientStop x:Name="BorderBrushTop" Color="#c8aa6d" Offset="0"/>
+                    <GradientStop x:Name="BorderBrushBot" Color="#795c28" Offset="1"/>
+                </LinearGradientBrush>
+            </Border.BorderBrush>
+            <Grid Margin="-2">
+                <Border x:Name="PressedBorder" BorderThickness="2" Background="#00000000" Visibility="Hidden">
+                    <Border.BorderBrush>
+                        <LinearGradientBrush StartPoint="0,0" EndPoint="0,1">
+                            <GradientStop Color="#463817" Offset="0"/>
+                            <GradientStop Color="#694f27" Offset="1"/>
+                        </LinearGradientBrush>
+                    </Border.BorderBrush>
+                </Border>
+                <TextBlock x:Name="ButtonTextBox" Text="SAVE" Foreground="#cdbe91" FontWeight="Bold" HorizontalAlignment="Center" VerticalAlignment="Center"/>
+            </Grid>
+
+        </Border>
+
+    </Grid>
+</UserControl>

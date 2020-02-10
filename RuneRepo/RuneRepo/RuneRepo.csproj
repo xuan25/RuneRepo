@@ -1,0 +1,213 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="15.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProjectGuid>{C6A06267-8B6B-4D59-8B18-63C5BB67FB1D}</ProjectGuid>
+    <OutputType>WinExe</OutputType>
+    <RootNamespace>RuneRepo</RootNamespace>
+    <AssemblyName>RuneRepo</AssemblyName>
+    <TargetFrameworkVersion>v4.7.2</TargetFrameworkVersion>
+    <FileAlignment>512</FileAlignment>
+    <ProjectTypeGuids>{60dc8134-eba5-43b8-bcc9-bb4bc16c2548};{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}</ProjectTypeGuids>
+    <WarningLevel>4</WarningLevel>
+    <AutoGenerateBindingRedirects>true</AutoGenerateBindingRedirects>
+    <Deterministic>true</Deterministic>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <PlatformTarget>AnyCPU</PlatformTarget>
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>bin\Debug\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <PlatformTarget>AnyCPU</PlatformTarget>
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>bin\Release\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="System" />
+    <Reference Include="System.Data" />
+    <Reference Include="System.Web" />
+    <Reference Include="System.Xml" />
+    <Reference Include="Microsoft.CSharp" />
+    <Reference Include="System.Core" />
+    <Reference Include="System.Xml.Linq" />
+    <Reference Include="System.Data.DataSetExtensions" />
+    <Reference Include="System.Net.Http" />
+    <Reference Include="System.Xaml">
+      <RequiredTargetFramework>4.0</RequiredTargetFramework>
+    </Reference>
+    <Reference Include="WindowsBase" />
+    <Reference Include="PresentationCore" />
+    <Reference Include="PresentationFramework" />
+  </ItemGroup>
+  <ItemGroup>
+    <ApplicationDefinition Include="App.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </ApplicationDefinition>
+    <Page Include="NewRunePageItem.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="RoundButton.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="RunePageItem.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="MainWindow.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Compile Include="App.xaml.cs">
+      <DependentUpon>App.xaml</DependentUpon>
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="ClientUx\AuthRequestUtil.cs" />
+    <Compile Include="ClientUx\ClientLocator.cs" />
+    <Compile Include="ClientUx\RequestWrapper.cs" />
+    <Compile Include="NewRunePageItem.xaml.cs">
+      <DependentUpon>NewRunePageItem.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="RoundButton.xaml.cs">
+      <DependentUpon>RoundButton.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="RunePageItem.xaml.cs">
+      <DependentUpon>RunePageItem.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="TextButton.xaml.cs">
+      <DependentUpon>TextButton.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Util\JsonUtil.cs" />
+    <Compile Include="MainWindow.xaml.cs">
+      <DependentUpon>MainWindow.xaml</DependentUpon>
+      <SubType>Code</SubType>
+    </Compile>
+    <Page Include="TextButton.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="Properties\AssemblyInfo.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Properties\Resources.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>Resources.resx</DependentUpon>
+    </Compile>
+    <Compile Include="Properties\Settings.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DependentUpon>Settings.settings</DependentUpon>
+      <DesignTimeSharedInput>True</DesignTimeSharedInput>
+    </Compile>
+    <EmbeddedResource Include="Properties\Resources.resx">
+      <Generator>ResXFileCodeGenerator</Generator>
+      <LastGenOutput>Resources.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
+    <None Include="Properties\Settings.settings">
+      <Generator>SettingsSingleFileGenerator</Generator>
+      <LastGenOutput>Settings.Designer.cs</LastGenOutput>
+    </None>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="App.config" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="images\construct\8000\auxillary\p-beam1.png" />
+    <Resource Include="images\construct\8000\auxillary\p-construct_blast1.png" />
+    <Resource Include="images\construct\8000\auxillary\p-construct_blast2.png" />
+    <Resource Include="images\construct\8000\auxillary\p-construct_light.png" />
+    <Resource Include="images\construct\8000\auxillary\p-particles1.png" />
+    <Resource Include="images\construct\8000\construct.png" />
+    <Resource Include="images\construct\8000\environment.jpg" />
+    <Resource Include="images\construct\8000\keystones\8005.png" />
+    <Resource Include="images\construct\8000\keystones\8008.png" />
+    <Resource Include="images\construct\8000\keystones\8010.png" />
+    <Resource Include="images\construct\8000\keystones\8021.png" />
+    <Resource Include="images\construct\8000\keystones\8101.png" />
+    <Resource Include="images\construct\8000\second\8100.png" />
+    <Resource Include="images\construct\8000\second\8200.png" />
+    <Resource Include="images\construct\8000\second\8300.png" />
+    <Resource Include="images\construct\8000\second\8400.png" />
+    <Resource Include="images\construct\8100\auxillary\d-shockwave1.png" />
+    <Resource Include="images\construct\8100\auxillary\d-shockwave2.png" />
+    <Resource Include="images\construct\8100\auxillary\d-vapor1.png" />
+    <Resource Include="images\construct\8100\auxillary\d-vapor2.png" />
+    <Resource Include="images\construct\8100\auxillary\d-welllight.png" />
+    <Resource Include="images\construct\8100\construct.png" />
+    <Resource Include="images\construct\8100\environment.jpg" />
+    <Resource Include="images\construct\8100\keystones\8112.png" />
+    <Resource Include="images\construct\8100\keystones\8124.png" />
+    <Resource Include="images\construct\8100\keystones\8128.png" />
+    <Resource Include="images\construct\8100\keystones\9923.png" />
+    <Resource Include="images\construct\8100\second\8000.png" />
+    <Resource Include="images\construct\8100\second\8200.png" />
+    <Resource Include="images\construct\8100\second\8300.png" />
+    <Resource Include="images\construct\8100\second\8400.png" />
+    <Resource Include="images\construct\8200\auxillary\s-aftershocks.png" />
+    <Resource Include="images\construct\8200\auxillary\s-bg_light.png" />
+    <Resource Include="images\construct\8200\auxillary\s-conrock1.png" />
+    <Resource Include="images\construct\8200\auxillary\s-conrock2.png" />
+    <Resource Include="images\construct\8200\auxillary\s-conrock3.png" />
+    <Resource Include="images\construct\8200\auxillary\s-conrock4.png" />
+    <Resource Include="images\construct\8200\auxillary\s-core.png" />
+    <Resource Include="images\construct\8200\auxillary\s-shockwave.png" />
+    <Resource Include="images\construct\8200\auxillary\s-spark.png" />
+    <Resource Include="images\construct\8200\construct.png" />
+    <Resource Include="images\construct\8200\environment.jpg" />
+    <Resource Include="images\construct\8200\keystones\8214.png" />
+    <Resource Include="images\construct\8200\keystones\8229.png" />
+    <Resource Include="images\construct\8200\keystones\8230.png" />
+    <Resource Include="images\construct\8200\second\8000.png" />
+    <Resource Include="images\construct\8200\second\8100.png" />
+    <Resource Include="images\construct\8200\second\8300.png" />
+    <Resource Include="images\construct\8200\second\8400.png" />
+    <Resource Include="images\construct\8300\auxillary\i-construct_rays.png" />
+    <Resource Include="images\construct\8300\auxillary\i-lightborder.png" />
+    <Resource Include="images\construct\8300\auxillary\i-lighttrace1.png" />
+    <Resource Include="images\construct\8300\auxillary\i-_shockwave.png" />
+    <Resource Include="images\construct\8300\auxillary\i-_shockwave2.png" />
+    <Resource Include="images\construct\8300\construct.png" />
+    <Resource Include="images\construct\8300\environment.jpg" />
+    <Resource Include="images\construct\8300\keystones\8351.png" />
+    <Resource Include="images\construct\8300\keystones\8352.png" />
+    <Resource Include="images\construct\8300\keystones\8353.png" />
+    <Resource Include="images\construct\8300\keystones\8356.png" />
+    <Resource Include="images\construct\8300\keystones\8358.png" />
+    <Resource Include="images\construct\8300\keystones\8360.png" />
+    <Resource Include="images\construct\8300\second\8000.png" />
+    <Resource Include="images\construct\8300\second\8100.png" />
+    <Resource Include="images\construct\8300\second\8200.png" />
+    <Resource Include="images\construct\8300\second\8400.png" />
+    <Resource Include="images\construct\8400\auxillary\r-construct_light.png" />
+    <Resource Include="images\construct\8400\auxillary\r-plateau.png" />
+    <Resource Include="images\construct\8400\auxillary\r-plumes1.png" />
+    <Resource Include="images\construct\8400\auxillary\r-plumes2.png" />
+    <Resource Include="images\construct\8400\construct.png" />
+    <Resource Include="images\construct\8400\environment.jpg" />
+    <Resource Include="images\construct\8400\keystones\8437.png" />
+    <Resource Include="images\construct\8400\keystones\8439.png" />
+    <Resource Include="images\construct\8400\keystones\8465.png" />
+    <Resource Include="images\construct\8400\second\8000.png" />
+    <Resource Include="images\construct\8400\second\8100.png" />
+    <Resource Include="images\construct\8400\second\8200.png" />
+    <Resource Include="images\construct\8400\second\8300.png" />
+    <Resource Include="images\backdrop-magic.png" />
+  </ItemGroup>
+  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+</Project>
