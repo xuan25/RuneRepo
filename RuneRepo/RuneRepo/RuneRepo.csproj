@@ -128,11 +128,6 @@
     <None Include="App.config" />
   </ItemGroup>
   <ItemGroup>
-    <Resource Include="images\construct\8000\auxillary\p-beam1.png" />
-    <Resource Include="images\construct\8000\auxillary\p-construct_blast1.png" />
-    <Resource Include="images\construct\8000\auxillary\p-construct_blast2.png" />
-    <Resource Include="images\construct\8000\auxillary\p-construct_light.png" />
-    <Resource Include="images\construct\8000\auxillary\p-particles1.png" />
     <Resource Include="images\construct\8000\construct.png" />
     <Resource Include="images\construct\8000\environment.jpg" />
     <Resource Include="images\construct\8000\keystones\8005.png" />
@@ -144,11 +139,6 @@
     <Resource Include="images\construct\8000\second\8200.png" />
     <Resource Include="images\construct\8000\second\8300.png" />
     <Resource Include="images\construct\8000\second\8400.png" />
-    <Resource Include="images\construct\8100\auxillary\d-shockwave1.png" />
-    <Resource Include="images\construct\8100\auxillary\d-shockwave2.png" />
-    <Resource Include="images\construct\8100\auxillary\d-vapor1.png" />
-    <Resource Include="images\construct\8100\auxillary\d-vapor2.png" />
-    <Resource Include="images\construct\8100\auxillary\d-welllight.png" />
     <Resource Include="images\construct\8100\construct.png" />
     <Resource Include="images\construct\8100\environment.jpg" />
     <Resource Include="images\construct\8100\keystones\8112.png" />
@@ -159,15 +149,6 @@
     <Resource Include="images\construct\8100\second\8200.png" />
     <Resource Include="images\construct\8100\second\8300.png" />
     <Resource Include="images\construct\8100\second\8400.png" />
-    <Resource Include="images\construct\8200\auxillary\s-aftershocks.png" />
-    <Resource Include="images\construct\8200\auxillary\s-bg_light.png" />
-    <Resource Include="images\construct\8200\auxillary\s-conrock1.png" />
-    <Resource Include="images\construct\8200\auxillary\s-conrock2.png" />
-    <Resource Include="images\construct\8200\auxillary\s-conrock3.png" />
-    <Resource Include="images\construct\8200\auxillary\s-conrock4.png" />
-    <Resource Include="images\construct\8200\auxillary\s-core.png" />
-    <Resource Include="images\construct\8200\auxillary\s-shockwave.png" />
-    <Resource Include="images\construct\8200\auxillary\s-spark.png" />
     <Resource Include="images\construct\8200\construct.png" />
     <Resource Include="images\construct\8200\environment.jpg" />
     <Resource Include="images\construct\8200\keystones\8214.png" />
@@ -177,11 +158,6 @@
     <Resource Include="images\construct\8200\second\8100.png" />
     <Resource Include="images\construct\8200\second\8300.png" />
     <Resource Include="images\construct\8200\second\8400.png" />
-    <Resource Include="images\construct\8300\auxillary\i-construct_rays.png" />
-    <Resource Include="images\construct\8300\auxillary\i-lightborder.png" />
-    <Resource Include="images\construct\8300\auxillary\i-lighttrace1.png" />
-    <Resource Include="images\construct\8300\auxillary\i-_shockwave.png" />
-    <Resource Include="images\construct\8300\auxillary\i-_shockwave2.png" />
     <Resource Include="images\construct\8300\construct.png" />
     <Resource Include="images\construct\8300\environment.jpg" />
     <Resource Include="images\construct\8300\keystones\8351.png" />
@@ -194,10 +170,6 @@
     <Resource Include="images\construct\8300\second\8100.png" />
     <Resource Include="images\construct\8300\second\8200.png" />
     <Resource Include="images\construct\8300\second\8400.png" />
-    <Resource Include="images\construct\8400\auxillary\r-construct_light.png" />
-    <Resource Include="images\construct\8400\auxillary\r-plateau.png" />
-    <Resource Include="images\construct\8400\auxillary\r-plumes1.png" />
-    <Resource Include="images\construct\8400\auxillary\r-plumes2.png" />
     <Resource Include="images\construct\8400\construct.png" />
     <Resource Include="images\construct\8400\environment.jpg" />
     <Resource Include="images\construct\8400\keystones\8437.png" />
