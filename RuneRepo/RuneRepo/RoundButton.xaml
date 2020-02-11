@@ -6,7 +6,7 @@
              xmlns:local="clr-namespace:RuneRepo"
              mc:Ignorable="d" 
              d:DesignHeight="28" d:DesignWidth="28" Height="28" Width="28">
-    <Grid x:Name="ButtonGrid" Cursor="Hand" MouseLeftButtonDown="ButtonGrid_MouseLeftButtonDown" MouseLeftButtonUp="ButtonGrid_MouseLeftButtonUp">
+    <Grid x:Name="ButtonGrid" Cursor="Hand" MouseLeftButtonDown="ButtonGrid_MouseLeftButtonDown" MouseLeftButtonUp="ButtonGrid_MouseLeftButtonUp" MouseEnter="ButtonGrid_MouseEnter">
         <Grid.Triggers>
             <EventTrigger RoutedEvent="Grid.MouseEnter">
                 <BeginStoryboard>

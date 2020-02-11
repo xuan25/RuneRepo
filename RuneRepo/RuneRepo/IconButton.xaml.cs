@@ -47,17 +47,24 @@ namespace RuneRepo
         {
             ((Grid)sender).CaptureMouse();
             IconPathPressed.Visibility = Visibility.Visible;
-            //IconPath.Fill = new SolidColorBrush((Color)ColorConverter.ConvertFromString("#785a28"));
         }
 
         private void ButtonGrid_MouseLeftButtonUp(object sender, MouseButtonEventArgs e)
         {
             ((Grid)sender).ReleaseMouseCapture();
             IconPathPressed.Visibility = Visibility.Hidden;
-            //IconPath.Fill = new SolidColorBrush((Color)ColorConverter.ConvertFromString("#ccbd90"));
 
             if (this.IsMouseOver)
                 Clicked?.Invoke(this, e);
+        }
+
+        private void ButtonGrid_MouseEnter(object sender, MouseEventArgs e)
+        {
+            if (e.LeftButton == MouseButtonState.Released)
+            {
+                IconPathPressed.Visibility = Visibility.Hidden;
+                IconPath.Fill = new SolidColorBrush((Color)ColorConverter.ConvertFromString("#ccbd90"));
+            }
         }
     }
 }

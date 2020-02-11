@@ -1,5 +1,6 @@
 ﻿using JsonUtil;
 using RuneRepo.ClientUx;
+using System;
 using System.IO;
 using System.Windows;
 using System.Windows.Controls;
@@ -68,17 +69,32 @@ namespace RuneRepo
             RunePagePanel.Children.Insert(RunePagePanel.Children.Count - 1, runePageItem);
         }
 
+        private bool dragInit = false;
+        private Point dragInitPos;
         private void RunePageItem_MouseMove(object sender, MouseEventArgs e)
         {
             if(e.LeftButton == MouseButtonState.Pressed)
             {
-                RunePageItem runePageItem = (RunePageItem)sender;
+                if (dragInit)
+                {
+                    Point currentPos = e.GetPosition(this);
+                    if(Math.Abs(dragInitPos.X - currentPos.X) > 5 || Math.Abs(dragInitPos.Y - currentPos.Y) > 5)
+                    {
+                        RunePageItem runePageItem = (RunePageItem)sender;
 
-                DragViewImage.Source = runePageItem.GetDraggingSnapshot(e);
-                DragDrop.DoDragDrop(RunePagePanel, runePageItem, DragDropEffects.Move);
-                DragViewImage.Source = null;
+                        DragViewImage.Source = runePageItem.GetDraggingSnapshot(e, new Point(dragInitPos.X - currentPos.X, dragInitPos.Y - currentPos.Y));
+                        DragDrop.DoDragDrop(RunePagePanel, runePageItem, DragDropEffects.Move);
+                        DragViewImage.Source = null;
 
-                UpdateConfig();
+                        UpdateConfig();
+                        dragInit = false;
+                    }
+                }
+                else
+                {
+                    dragInit = true;
+                    dragInitPos = e.GetPosition(this);
+                }
             }
         }
 

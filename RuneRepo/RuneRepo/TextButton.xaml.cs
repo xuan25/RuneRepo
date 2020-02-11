@@ -56,5 +56,14 @@ namespace RuneRepo
             if (this.IsMouseOver)
                 Clicked?.Invoke(this, e);
         }
+
+        private void ButtonGrid_MouseEnter(object sender, MouseEventArgs e)
+        {
+            if(e.LeftButton == MouseButtonState.Released)
+            {
+                PressedBorder.Visibility = Visibility.Hidden;
+                ButtonTextBox.Foreground = new SolidColorBrush((Color)ColorConverter.ConvertFromString("#cdbe91"));
+            }
+        }
     }
 }

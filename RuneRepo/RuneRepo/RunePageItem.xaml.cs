@@ -79,9 +79,12 @@ namespace RuneRepo
             this.DataContext = this;
         }
 
-        public BitmapSource GetDraggingSnapshot(MouseEventArgs e)
+        public BitmapSource GetDraggingSnapshot(MouseEventArgs e, Point offset)
         {
-            SnapShotMousePosition = e.GetPosition(MainGrid);
+            Point point = e.GetPosition(MainGrid);
+            point.Offset(offset.X, offset.Y);
+            SnapShotMousePosition = point;
+
             return Snapshot;
         }
 
