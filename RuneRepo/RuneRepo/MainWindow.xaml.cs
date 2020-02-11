@@ -1,9 +1,7 @@
 ﻿using JsonUtil;
 using RuneRepo.ClientUx;
 using System.IO;
-using System.Threading.Tasks;
 using System.Windows;
-using System.Windows.Controls;
 using System.Windows.Input;
 
 namespace RuneRepo
@@ -127,42 +125,6 @@ namespace RuneRepo
                 return false;
             RequestWrapper = new RequestWrapper(lolPath);
             return RequestWrapper.IsAvaliable;
-        }
-
-        // TODO : Remove
-        private void RunePageNameBox_MouseLeftButtonDown(object sender, MouseButtonEventArgs e)
-        {
-            if (e.ClickCount == 2)
-            {
-                TextBox textBox = (TextBox)((Grid)((TextBlock)sender).Parent).Children[1];
-                textBox.Visibility = Visibility.Visible;
-                Dispatcher.Invoke(async () =>
-                {
-                    await Task.Delay(1);
-                    textBox.SelectAll();
-                    textBox.Focus();
-                    textBox.LostFocus += RunePageNameEditBox_LostFocus;
-                });
-            }
-        }
-
-        // TODO : Remove
-        private void RunePageNameEditBox_LostFocus(object sender, RoutedEventArgs e)
-        {
-            TextBox textBox = (TextBox)sender;
-            textBox.LostFocus -= RunePageNameEditBox_LostFocus;
-            textBox.Visibility = Visibility.Hidden;
-            UpdateConfig();
-        }
-
-        // TODO : Remove
-        private void RunePageNameEditBox_KeyDown(object sender, KeyEventArgs e)
-        {
-            if(e.Key == Key.Enter)
-            {
-                ((TextBox)sender).Visibility = Visibility.Hidden;
-                UpdateConfig();
-            }
         }
 
         private void CloseWindowBtn_Clicked(object sender, MouseButtonEventArgs e)
