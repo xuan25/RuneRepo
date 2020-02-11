@@ -1,8 +1,10 @@
 ﻿using JsonUtil;
 using System;
 using System.ComponentModel;
+using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
+using System.Windows.Media;
 using System.Windows.Media.Imaging;
 
 namespace RuneRepo
@@ -39,6 +41,19 @@ namespace RuneRepo
             }
         }
 
+        public BitmapSource Snapshot
+        {
+            get
+            {
+                RenderTargetBitmap renderTargetBitmap = new RenderTargetBitmap((int)MainGrid.RenderSize.Width, (int)MainGrid.RenderSize.Height, 96, 96, PixelFormats.Default);
+                renderTargetBitmap.Render(MainGrid);
+                renderTargetBitmap.Freeze();
+                return renderTargetBitmap;
+            }
+        }
+
+        public Point SnapShotMousePosition { get; private set; }
+
         public RunePageItem()
         {
             InitializeComponent();
@@ -62,6 +77,12 @@ namespace RuneRepo
             SetKeystone(primaryStyleId, perkId);
 
             this.DataContext = this;
+        }
+
+        public BitmapSource GetDraggingSnapshot(MouseEventArgs e)
+        {
+            SnapShotMousePosition = e.GetPosition(MainGrid);
+            return Snapshot;
         }
 
         private void SetEnvironment(int primaryStyleId)

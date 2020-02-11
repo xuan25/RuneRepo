@@ -54,7 +54,7 @@
             </BeginStoryboard>
         </EventTrigger>
     </UserControl.Triggers>
-    <Grid ClipToBounds="True">
+    <Grid x:Name="MainGrid" ClipToBounds="True">
         <Grid x:Name="BackgroundGrid" Margin="-3">
             <Grid.Background>
                 <VisualBrush Stretch="UniformToFill">
@@ -211,6 +211,5 @@
                 </Grid.Background>
             </Grid>
         </Grid>
-        
     </Grid>
 </UserControl>

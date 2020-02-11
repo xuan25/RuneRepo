@@ -2,6 +2,7 @@
 using RuneRepo.ClientUx;
 using System.IO;
 using System.Windows;
+using System.Windows.Controls;
 using System.Windows.Input;
 using System.Windows.Media;
 
@@ -71,14 +72,23 @@ namespace RuneRepo
         {
             if(e.LeftButton == MouseButtonState.Pressed)
             {
-                DragDrop.DoDragDrop(RunePagePanel, (RunePageItem)sender, DragDropEffects.Move);
+                RunePageItem runePageItem = (RunePageItem)sender;
+
+                DragViewImage.Source = runePageItem.GetDraggingSnapshot(e);
+                DragDrop.DoDragDrop(RunePagePanel, runePageItem, DragDropEffects.Move);
+                DragViewImage.Source = null;
+
                 UpdateConfig();
             }
         }
 
-        private void RunePagePanel_DragOver(object sender, DragEventArgs e)
+        private void RunePageViewer_DragOver(object sender, DragEventArgs e)
         {
             RunePageItem draggingPageItem = (RunePageItem)e.Data.GetData(typeof(RunePageItem));
+
+            Point overCanvasPoint = e.GetPosition(DragViewCanvas);
+            Canvas.SetLeft(DragViewImage, overCanvasPoint.X - draggingPageItem.SnapShotMousePosition.X);
+            Canvas.SetTop(DragViewImage, overCanvasPoint.Y - draggingPageItem.SnapShotMousePosition.Y);
 
             HitTestResult hitTestResult = VisualTreeHelper.HitTest(RunePagePanel, e.GetPosition(RunePagePanel));
             if (hitTestResult != null)
