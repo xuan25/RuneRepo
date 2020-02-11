@@ -124,7 +124,7 @@
                 </LinearGradientBrush>
             </Border.BorderBrush>
             <Grid>
-                <local:TextButton x:Name="StoreBtn" Text="Store New" Clicked="StoreBtn_Clicked"/>
+                <local:TextButton x:Name="StoreBtn" Height="32" Width="100" Text="Store Current" Clicked="StoreBtn_Clicked"/>
 
             </Grid>
         </Border>

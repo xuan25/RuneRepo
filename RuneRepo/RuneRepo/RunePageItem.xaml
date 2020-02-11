@@ -149,7 +149,7 @@
                         </Style>
                     </TextBox.Style>
                 </TextBox>
-                <local:TextButton x:Name="ApplyBtn" Text="Apply" Clicked="ApplyBtn_Clicked"/>
+                <local:TextButton x:Name="ApplyBtn" Height="32" Width="78" Text="Apply" Clicked="ApplyBtn_Clicked"/>
                 <local:RoundButton x:Name="DeleteBtn" VerticalAlignment="Bottom" HorizontalAlignment="Right" Margin="12" Clicked="DeleteBtn_Clicked">
                     <local:RoundButton.IconGeometry>
                         <GeometryGroup>

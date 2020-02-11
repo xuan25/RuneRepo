@@ -1,0 +1,53 @@
+﻿<UserControl x:Class="RuneRepo.MessagePopup"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:local="clr-namespace:RuneRepo"
+             mc:Ignorable="d" 
+             d:DesignHeight="190" d:DesignWidth="400" Background="#bd000000" HorizontalAlignment="Stretch" VerticalAlignment="Stretch">
+    <Grid HorizontalAlignment="Center" VerticalAlignment="Center">
+        <Rectangle Margin="8,1" Stroke="#463714" Fill="#010a13" RadiusX="10" RadiusY="1000"/>
+        <Border Margin="0,4" BorderBrush="#463714" BorderThickness="2" Background="#010a13">
+            <Grid>
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="30"/>
+                </Grid.RowDefinitions>
+                <TextBlock x:Name="MessageBox" Text="Are you sure you want to delete this page?" Foreground="#989486" HorizontalAlignment="Center" VerticalAlignment="Center" Margin="35,16"/>
+                <Grid Grid.Row="1" Width="142" Margin="0,0,0,-2" Background="#010a13">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="3"/>
+                        <ColumnDefinition Width="*"/>
+                        <ColumnDefinition Width="*"/>
+                        <ColumnDefinition Width="3"/>
+                    </Grid.ColumnDefinitions>
+                    <Path Grid.Column="0" Fill="#463714" VerticalAlignment="Bottom" HorizontalAlignment="Left">
+                        <Path.Data>
+                            <PathGeometry>
+                                <PathFigure StartPoint="0,2" IsClosed="True">
+                                    <LineSegment Point="0,12"/>
+                                    <LineSegment Point="2,12"/>
+                                    <LineSegment Point="2,0"/>
+                                </PathFigure>
+                            </PathGeometry>
+                        </Path.Data>
+                    </Path>
+                    <local:TextButton x:Name="YesBtn" Grid.Column="1" Text="YES" HorizontalAlignment="Stretch" Margin="1,0" Clicked="YesBtn_Clicked"/>
+                    <local:TextButton x:Name="NoBtn" Grid.Column="2" Text="NO" HorizontalAlignment="Stretch" Margin="1,0" Clicked="NoBtn_Clicked"/>
+                    <Path Grid.Column="3" Fill="#463714" VerticalAlignment="Bottom" HorizontalAlignment="Right">
+                        <Path.Data>
+                            <PathGeometry>
+                                <PathFigure StartPoint="0,0" IsClosed="True">
+                                    <LineSegment Point="0,12"/>
+                                    <LineSegment Point="2,12"/>
+                                    <LineSegment Point="2,2"/>
+                                </PathFigure>
+                            </PathGeometry>
+                        </Path.Data>
+                    </Path>
+                </Grid>
+            </Grid>
+        </Border>
+    </Grid>
+</UserControl>

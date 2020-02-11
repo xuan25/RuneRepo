@@ -5,7 +5,7 @@
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              xmlns:local="clr-namespace:RuneRepo"
              mc:Ignorable="d" 
-             d:DesignHeight="32" d:DesignWidth="78" Height="32" Width="78">
+             d:DesignHeight="32" d:DesignWidth="78">
     <Grid x:Name="ButtonGrid" Cursor="Hand" MouseLeftButtonDown="ButtonGrid_MouseLeftButtonDown" MouseLeftButtonUp="ButtonGrid_MouseLeftButtonUp">
         <Grid.Triggers>
             <EventTrigger RoutedEvent="Grid.MouseEnter">

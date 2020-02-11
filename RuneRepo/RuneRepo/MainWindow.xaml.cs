@@ -72,11 +72,17 @@ namespace RuneRepo
 
         private void RunePageItem_Delete(RunePageItem runePageItem)
         {
-            if (MessageBox.Show(string.Format("Delete runepage \"{0}\" ?", runePageItem.PageName), "Delete confirmation", MessageBoxButton.YesNo) == MessageBoxResult.Yes)
+            MessagePopup messagePopup = new MessagePopup("Are you sure you want to delete this page?");
+            messagePopup.Decided += delegate (bool result)
             {
-                RunePagePanel.Children.Remove(runePageItem);
-            }
-            UpdateConfig();
+                if (result)
+                {
+                    RunePagePanel.Children.Remove(runePageItem);
+                    UpdateConfig();
+                }
+                MainViewGrid.Children.Remove(messagePopup);
+            };
+            MainViewGrid.Children.Add(messagePopup);
         }
 
         private void RunePageItem_Apply(Json.Value value)
