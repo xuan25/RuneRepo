@@ -3,6 +3,7 @@ using RuneRepo.ClientUx;
 using System.IO;
 using System.Windows;
 using System.Windows.Input;
+using System.Windows.Media;
 
 namespace RuneRepo
 {
@@ -62,7 +63,46 @@ namespace RuneRepo
             runePageItem.Apply += RunePageItem_Apply;
             runePageItem.Delete += RunePageItem_Delete;
             runePageItem.Updated += RunePageItem_Updated;
+            runePageItem.MouseMove += RunePageItem_MouseMove;
             RunePagePanel.Children.Insert(RunePagePanel.Children.Count - 1, runePageItem);
+        }
+
+        private void RunePageItem_MouseMove(object sender, MouseEventArgs e)
+        {
+            if(e.LeftButton == MouseButtonState.Pressed)
+            {
+                DragDrop.DoDragDrop(RunePagePanel, (RunePageItem)sender, DragDropEffects.Move);
+                UpdateConfig();
+            }
+        }
+
+        private void RunePagePanel_DragOver(object sender, DragEventArgs e)
+        {
+            RunePageItem draggingPageItem = (RunePageItem)e.Data.GetData(typeof(RunePageItem));
+
+            HitTestResult hitTestResult = VisualTreeHelper.HitTest(RunePagePanel, e.GetPosition(RunePagePanel));
+            if (hitTestResult != null)
+            {
+                RunePageItem dragOverPageItem = FindVisualParent<RunePageItem>(hitTestResult.VisualHit);
+                if (dragOverPageItem != null && dragOverPageItem != draggingPageItem)
+                {
+                    int newIndex = RunePagePanel.Children.IndexOf(dragOverPageItem);
+                    RunePagePanel.Children.Remove(draggingPageItem);
+                    RunePagePanel.Children.Insert(newIndex, draggingPageItem);
+                }
+            }
+        }
+
+        public static T FindVisualParent<T>(DependencyObject obj) where T : class
+        {
+            while (obj != null)
+            {
+                if (obj is T)
+                    return obj as T;
+
+                obj = VisualTreeHelper.GetParent(obj);
+            }
+            return null;
         }
 
         private void RunePageItem_Updated(RunePageItem runePageItem)

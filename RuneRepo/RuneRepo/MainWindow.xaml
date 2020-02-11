@@ -82,7 +82,7 @@
 
             <Border Grid.Row="1" BorderBrush="#50ffffff" BorderThickness="0,1,0,0">
                 <Grid x:Name="MainViewGrid">
-                    <ScrollViewer HorizontalAlignment="Stretch" VerticalAlignment="Stretch" VerticalScrollBarVisibility="Auto">
+                    <ScrollViewer HorizontalAlignment="Stretch" VerticalAlignment="Stretch" VerticalScrollBarVisibility="Auto" AllowDrop="True">
                         <ScrollViewer.Resources>
                             <Style x:Key="RepeatButtonTransparent" TargetType="{x:Type RepeatButton}">
                                 <Setter Property="OverridesDefaultStyle" Value="true"/>
@@ -209,7 +209,7 @@
                                 </Setter>
                             </Style>
                         </ScrollViewer.Style>
-                        <WrapPanel x:Name="RunePagePanel" HorizontalAlignment="Center"/>
+                        <WrapPanel x:Name="RunePagePanel" HorizontalAlignment="Center" DragOver="RunePagePanel_DragOver"/>
                     </ScrollViewer>
                 </Grid>
             </Border>
