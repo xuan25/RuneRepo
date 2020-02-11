@@ -164,5 +164,23 @@ namespace RuneRepo
                 UpdateConfig();
             }
         }
+
+        private void CloseWindowBtn_Clicked(object sender, MouseButtonEventArgs e)
+        {
+            this.Close();
+        }
+
+        private void MaximizeWindowBtn_Clicked(object sender, MouseButtonEventArgs e)
+        {
+            if (this.WindowState == WindowState.Maximized)
+                this.WindowState = WindowState.Normal;
+            else
+                this.WindowState = WindowState.Maximized;
+        }
+
+        private void MinimizeWindowBtn_Clicked(object sender, MouseButtonEventArgs e)
+        {
+            this.WindowState = WindowState.Minimized;
+        }
     }
 }

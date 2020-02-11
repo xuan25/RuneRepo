@@ -56,6 +56,10 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
+    <Page Include="IconButton.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="NewRunePageItem.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
@@ -79,6 +83,9 @@
     <Compile Include="ClientUx\AuthRequestUtil.cs" />
     <Compile Include="ClientUx\ClientLocator.cs" />
     <Compile Include="ClientUx\RequestWrapper.cs" />
+    <Compile Include="IconButton.xaml.cs">
+      <DependentUpon>IconButton.xaml</DependentUpon>
+    </Compile>
     <Compile Include="NewRunePageItem.xaml.cs">
       <DependentUpon>NewRunePageItem.xaml</DependentUpon>
     </Compile>
