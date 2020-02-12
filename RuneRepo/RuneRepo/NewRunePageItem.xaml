@@ -55,7 +55,7 @@
         </EventTrigger>
     </UserControl.Triggers>
     <Grid ClipToBounds="True">
-        <Grid x:Name="BackgroundGrid" Margin="-3">
+        <Grid x:Name="BackgroundGrid" Margin="-3" UseLayoutRounding="False">
             <Grid.Background>
                 <RadialGradientBrush>
                     <GradientStop Color="#17181a" Offset="0"/>

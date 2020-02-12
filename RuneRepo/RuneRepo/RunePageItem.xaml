@@ -21,11 +21,7 @@
                                 <CubicEase EasingMode="EaseOut"/>
                             </DoubleAnimation.EasingFunction>
                         </DoubleAnimation>
-                        <DoubleAnimation Storyboard.TargetName="SpitlineStop" Storyboard.TargetProperty="Offset" BeginTime="00:00:00.000" Duration="00:00:00.200" To="0">
-                            <DoubleAnimation.EasingFunction>
-                                <CubicEase EasingMode="EaseOut"/>
-                            </DoubleAnimation.EasingFunction>
-                        </DoubleAnimation>
+                        <DoubleAnimation Storyboard.TargetName="SpitlineStop" Storyboard.TargetProperty="Offset" BeginTime="00:00:00.000" Duration="00:00:00.200" To="0"/>
                     </Storyboard>
                 </Storyboard>
             </BeginStoryboard>
@@ -36,26 +32,22 @@
                     <Storyboard>
                         <ThicknessAnimation Storyboard.TargetName="BackgroundGrid" Storyboard.TargetProperty="Margin" BeginTime="00:00:00.000" Duration="00:00:00.200" To="-3">
                             <ThicknessAnimation.EasingFunction>
-                                <CubicEase EasingMode="EaseOut"/>
+                                <CubicEase EasingMode="EaseIn"/>
                             </ThicknessAnimation.EasingFunction>
                         </ThicknessAnimation>
                         <DoubleAnimation Storyboard.TargetName="InfoBorder" Storyboard.TargetProperty="Opacity" BeginTime="00:00:00.000" Duration="00:00:00.200" To="0">
                             <DoubleAnimation.EasingFunction>
-                                <CubicEase EasingMode="EaseOut"/>
+                                <CubicEase EasingMode="EaseIn"/>
                             </DoubleAnimation.EasingFunction>
                         </DoubleAnimation>
-                        <DoubleAnimation Storyboard.TargetName="SpitlineStop" Storyboard.TargetProperty="Offset" BeginTime="00:00:00.000" Duration="00:00:00.200" To="1">
-                            <DoubleAnimation.EasingFunction>
-                                <CubicEase EasingMode="EaseOut"/>
-                            </DoubleAnimation.EasingFunction>
-                        </DoubleAnimation>
+                        <DoubleAnimation Storyboard.TargetName="SpitlineStop" Storyboard.TargetProperty="Offset" BeginTime="00:00:00.000" Duration="00:00:00.200" To="1"/>
                     </Storyboard>
                 </Storyboard>
             </BeginStoryboard>
         </EventTrigger>
     </UserControl.Triggers>
     <Grid x:Name="MainGrid" ClipToBounds="True">
-        <Grid x:Name="BackgroundGrid" Margin="-3">
+        <Grid x:Name="BackgroundGrid" Margin="-3" UseLayoutRounding="False">
             <Grid.Background>
                 <VisualBrush Stretch="UniformToFill">
                     <VisualBrush.Visual>
@@ -79,7 +71,7 @@
                 </LinearGradientBrush>
             </Rectangle.Fill>
         </Rectangle>
-        <Border x:Name="InfoBorder" BorderThickness="1" Background="#99000000" Opacity="1">
+        <Border x:Name="InfoBorder" BorderThickness="1" Background="#cc000000" Opacity="1">
             <Border.BorderBrush>
                 <LinearGradientBrush StartPoint="0,0" EndPoint="1,1">
                     <GradientStop Color="#fdfdfd" Offset="0.0"/>
@@ -190,23 +182,22 @@
                         </GeometryGroup>
                     </local:RoundButton.IconGeometry>
                 </local:RoundButton>
-
             </Grid>
         </Border>
         <Grid Height="75" HorizontalAlignment="Stretch" VerticalAlignment="Bottom" Margin="15,0,0,0">
             <Grid.RowDefinitions>
                 <RowDefinition Height="25"/>
-                <RowDefinition Height="0.6"/>
+                <RowDefinition Height="1"/>
                 <RowDefinition Height="*"/>
             </Grid.RowDefinitions>
             <TextBlock x:Name="NameBox" Text="{Binding PageName}" Foreground="#eae0cd" FontWeight="Bold"/>
             <Grid Grid.Row="1">
                 <Grid.Background>
                     <LinearGradientBrush StartPoint="0,0" EndPoint="1,0">
-                        <GradientStop Color="#50fdfdfd" Offset="0.0"/>
-                        <GradientStop x:Name="SpitlineStop" Color="#50fdfdfd" Offset="1"/>
-                        <GradientStop Color="#c7a96f" Offset="{Binding ElementName=SpitlineStop, Path=Offset}"/>
-                        <GradientStop Color="#c7a96f" Offset="1.0"/>
+                        <GradientStop Color="#40fdfdfd" Offset="0.0"/>
+                        <GradientStop x:Name="SpitlineStop" Color="#40fdfdfd" Offset="1"/>
+                        <GradientStop Color="#90d4bd8f" Offset="{Binding ElementName=SpitlineStop, Path=Offset}"/>
+                        <GradientStop Color="#90d4bd8f" Offset="1.0"/>
                     </LinearGradientBrush>
                 </Grid.Background>
             </Grid>
