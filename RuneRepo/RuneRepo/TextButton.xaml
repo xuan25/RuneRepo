@@ -26,6 +26,16 @@
                                 <CubicEase EasingMode="EaseOut"/>
                             </ColorAnimation.EasingFunction>
                         </ColorAnimation>
+                        <DoubleAnimation Storyboard.TargetName="GlowBorder" Storyboard.TargetProperty="Opacity" Duration="00:00:00.100" To="1">
+                            <DoubleAnimation.EasingFunction>
+                                <CubicEase EasingMode="EaseOut"/>
+                            </DoubleAnimation.EasingFunction>
+                        </DoubleAnimation>
+                        <DoubleAnimation Storyboard.TargetName="GlowBorder" Storyboard.TargetProperty="Opacity" BeginTime="00:00:00.200" Duration="00:00:01.000" To="0">
+                            <DoubleAnimation.EasingFunction>
+                                <CubicEase EasingMode="EaseOut"/>
+                            </DoubleAnimation.EasingFunction>
+                        </DoubleAnimation>
                     </Storyboard>
                 </BeginStoryboard>
             </EventTrigger>
@@ -50,6 +60,17 @@
                     </Storyboard>
                 </BeginStoryboard>
             </EventTrigger>
+            <EventTrigger RoutedEvent="Grid.MouseLeftButtonDown">
+                <BeginStoryboard>
+                    <Storyboard>
+                        <DoubleAnimation Storyboard.TargetName="GlowBorder" Storyboard.TargetProperty="Opacity" Duration="00:00:00.100" To="0">
+                            <DoubleAnimation.EasingFunction>
+                                <CubicEase EasingMode="EaseOut"/>
+                            </DoubleAnimation.EasingFunction>
+                        </DoubleAnimation>
+                    </Storyboard>
+                </BeginStoryboard>
+            </EventTrigger>
         </Grid.Triggers>
         <Border BorderThickness="2" Background="#1e2328">
             <Border.BorderBrush>
@@ -71,6 +92,10 @@
             </Grid>
 
         </Border>
-
+        <Border x:Name="GlowBorder" BorderThickness="2" BorderBrush="#f0e5d6" Opacity="0" IsHitTestVisible="False">
+            <Border.Effect>
+                <BlurEffect Radius="15" KernelType="Gaussian"/>
+            </Border.Effect>
+        </Border>
     </Grid>
 </UserControl>
