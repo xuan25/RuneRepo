@@ -122,8 +122,17 @@ namespace RuneRepo
         {
             if (NameEditBox.IsFocused)
             {
-                ((ScrollViewer)((WrapPanel)this.Parent).Parent).Focus();
+                FrameworkElement parent = (FrameworkElement)this.Parent;
+                while (!parent.Focus())
+                {
+                    parent = (FrameworkElement)parent.Parent;
+                }
             }
+        }
+
+        private void InfoGrid_MouseMove(object sender, MouseEventArgs e)
+        {
+            e.Handled = true;
         }
     }
 }

@@ -86,7 +86,7 @@
                     <GradientStop Color="#c7a96f" Offset="1.0"/>
                 </LinearGradientBrush>
             </Border.BorderBrush>
-            <Grid>
+            <Grid x:Name="InfoGrid" MouseMove="InfoGrid_MouseMove">
                 <TextBox x:Name="NameEditBox" Width="100" Height="26" FontSize="11" Padding="6,4" Text="{Binding PageName}" VerticalAlignment="Top" HorizontalAlignment="Left" Margin="10,10">
                     <TextBox.Style>
                         <Style TargetType="{x:Type TextBox}">
