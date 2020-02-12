@@ -30,11 +30,11 @@ namespace RuneRepo
             LoadConfig();
         }
 
-        private void NewRunePageItem_StoreNew()
+        private async void NewRunePageItem_StoreNew()
         {
-            if (ValidateRequestWrapper())
+            if (await ValidateRequestWrapperAsync())
             {
-                Json.Value value = RequestWrapper.GetCurrentRunePage();
+                Json.Value value = await RequestWrapper.GetCurrentRunePageAsync();
 
                 value.Remove("current");
                 value.Remove("id");
@@ -50,7 +50,16 @@ namespace RuneRepo
             }
             else
             {
-                MessageBox.Show("Not avaliable", "Not avaliable");
+                MessagePopup messagePopup = new MessagePopup("Service currently unavailable, try again?");
+                messagePopup.Decided += delegate (bool result)
+                {
+                    if (result)
+                    {
+                        NewRunePageItem_StoreNew();
+                    }
+                    MainViewGrid.Children.Remove(messagePopup);
+                };
+                MainViewGrid.Children.Add(messagePopup);
             }
         }
 
@@ -161,24 +170,33 @@ namespace RuneRepo
             MainViewGrid.Children.Add(messagePopup);
         }
 
-        private void RunePageItem_Apply(Json.Value value)
+        private async void RunePageItem_Apply(Json.Value value)
         {
-            if (ValidateRequestWrapper())
+            if (await ValidateRequestWrapperAsync())
             {
-                Json.Value currentPageJson = RequestWrapper.GetCurrentRunePage();
+                Json.Value currentPageJson = await RequestWrapper.GetCurrentRunePageAsync();
                 int order = 0;
                 if(currentPageJson != null)
                 {
                     ulong selectedId = currentPageJson["id"];
                     if(currentPageJson["isDeletable"])
-                        RequestWrapper.DeleteRunePage(selectedId);
+                        await RequestWrapper.DeleteRunePageAsync(selectedId);
                 }
                 value["order"] = order;
-                RequestWrapper.AddRunePage(value);
+                await RequestWrapper.AddRunePageAsync(value);
             }
             else
             {
-                MessageBox.Show("Not avaliable", "Not avaliable");
+                MessagePopup messagePopup = new MessagePopup("Service currently unavailable, try again?");
+                messagePopup.Decided += delegate (bool result)
+                {
+                    if (result)
+                    {
+                        RunePageItem_Apply(value);
+                    }
+                    MainViewGrid.Children.Remove(messagePopup);
+                };
+                MainViewGrid.Children.Add(messagePopup);
             }
         }
 
@@ -197,18 +215,18 @@ namespace RuneRepo
             }
         }
 
-        private bool ValidateRequestWrapper()
+        private async System.Threading.Tasks.Task<bool> ValidateRequestWrapperAsync()
         {
             if(RequestWrapper != null)
             {
-                if (RequestWrapper.IsAvaliable)
+                if (await RequestWrapper.CheckAvaliableAsync())
                     return true;
             }
             string lolPath = ClientLocator.GetLolPath();
             if (lolPath == null)
                 return false;
             RequestWrapper = new RequestWrapper(lolPath);
-            return RequestWrapper.IsAvaliable;
+            return await RequestWrapper.CheckAvaliableAsync();
         }
 
         private void CloseWindowBtn_Clicked(object sender, MouseButtonEventArgs e)

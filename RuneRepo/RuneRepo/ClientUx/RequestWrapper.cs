@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.IO;
 using System.Net;
 using System.Text;
+using System.Threading.Tasks;
 
 namespace RuneRepo.ClientUx
 {
@@ -15,7 +16,7 @@ namespace RuneRepo.ClientUx
             {
                 try
                 {
-                    GetAuthToken();
+                    GetAuthTokenAsync().Wait();
                 }
                 catch (Exception)
                 {
@@ -33,20 +34,33 @@ namespace RuneRepo.ClientUx
             AuthRequest = new AuthRequestUtil(argsDict["app-port"], argsDict["remoting-auth-token"]);
         }
 
+        public async Task<bool> CheckAvaliableAsync()
+        {
+            try
+            {
+                await GetAuthTokenAsync();
+            }
+            catch (Exception)
+            {
+                return false;
+            }
+            return true;
+        }
 
 
-        public string GetAuthToken()
+
+        public async Task<string> GetAuthTokenAsync()
         {
             HttpWebRequest request = AuthRequest.CreateRequest("/riotclient/auth-token");
-            HttpWebResponse response = (HttpWebResponse)request.GetResponse();
+            HttpWebResponse response = (HttpWebResponse)await request.GetResponseAsync();
             string token = ReadStream(response.GetResponseStream()).Trim('"');
             return token;
         }
 
-        public Json.Value GetCurrentRunePage()
+        public async Task<Json.Value> GetCurrentRunePageAsync()
         {
             HttpWebRequest request = AuthRequest.CreateRequest("/lol-perks/v1/currentpage");
-            HttpWebResponse response = (HttpWebResponse)request.GetResponse();
+            HttpWebResponse response = (HttpWebResponse)await request.GetResponseAsync();
             if (response.StatusCode == HttpStatusCode.NotFound)
                 return null;
             string result = ReadStream(response.GetResponseStream());
@@ -54,17 +68,17 @@ namespace RuneRepo.ClientUx
             return value;
         }
 
-        public bool DeleteRunePage(ulong id)
+        public async Task<bool> DeleteRunePageAsync(ulong id)
         {
             HttpWebRequest request = AuthRequest.CreateRequest(string.Format("/lol-perks/v1/pages/{0}", id));
             request.Method = "DELETE";
-            HttpWebResponse response = (HttpWebResponse)request.GetResponse();
+            HttpWebResponse response = (HttpWebResponse)await request.GetResponseAsync();
             if(response.StatusCode == HttpStatusCode.NoContent)
                 return true;
             return false;
         }
 
-        public bool AddRunePage(Json.Value pageJson)
+        public async Task<bool> AddRunePageAsync(Json.Value pageJson)
         {
             HttpWebRequest request = AuthRequest.CreateRequest("/lol-perks/v1/pages");
             request.Method = "POST";
@@ -74,7 +88,7 @@ namespace RuneRepo.ClientUx
             newStream.Write(data, 0, data.Length);
             newStream.Close();
 
-            HttpWebResponse response = (HttpWebResponse)request.GetResponse();
+            HttpWebResponse response = (HttpWebResponse)await request.GetResponseAsync();
             if (response.StatusCode == HttpStatusCode.OK)
                 return true;
             return false;
