@@ -35,6 +35,16 @@ namespace RuneRepo
             if (ValidateRequestWrapper())
             {
                 Json.Value value = RequestWrapper.GetCurrentRunePage();
+
+                value.Remove("current");
+                value.Remove("id");
+                value.Remove("isActive");
+                value.Remove("isDeletable");
+                value.Remove("isEditable");
+                value.Remove("isValid");
+                value.Remove("lastModified");
+                value.Remove("order");
+
                 AppendRunePage(value);
                 UpdateConfig();
             }
@@ -156,12 +166,14 @@ namespace RuneRepo
             if (ValidateRequestWrapper())
             {
                 Json.Value currentPageJson = RequestWrapper.GetCurrentRunePage();
+                int order = 0;
                 if(currentPageJson != null)
                 {
-                    ulong cid = currentPageJson["id"];
+                    ulong selectedId = currentPageJson["id"];
                     if(currentPageJson["isDeletable"])
-                        RequestWrapper.DeleteRunePage(cid);
+                        RequestWrapper.DeleteRunePage(selectedId);
                 }
+                value["order"] = order;
                 RequestWrapper.AddRunePage(value);
             }
             else
