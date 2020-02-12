@@ -199,5 +199,19 @@
     <Resource Include="images\construct\8400\second\8300.png" />
     <Resource Include="images\backdrop-magic.png" />
   </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="libs\Microsoft.Xaml.Behaviors.dll" />
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+  <PropertyGroup>
+    <PreBuildEvent>mkdir $(ProjectDir)\libs\
+copy $(SolutionDir)packages\Microsoft.Xaml.Behaviors.Wpf.1.1.19\lib\net45\Microsoft.Xaml.Behaviors.dll $(ProjectDir)\libs\</PreBuildEvent>
+  </PropertyGroup>
+  <PropertyGroup>
+    <PostBuildEvent>cd $(TargetDir)
+del *.dll
+del *.xml
+del *.pdb
+del *.config</PostBuildEvent>
+  </PropertyGroup>
 </Project>
