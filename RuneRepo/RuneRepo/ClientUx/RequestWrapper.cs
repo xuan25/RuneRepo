@@ -57,15 +57,30 @@ namespace RuneRepo.ClientUx
             return token;
         }
 
-        public async Task<Json.Value> GetCurrentRunePageAsync()
+        public async Task<Json.Value> GetRunePages()
         {
-            HttpWebRequest request = AuthRequest.CreateRequest("/lol-perks/v1/currentpage");
+            HttpWebRequest request = AuthRequest.CreateRequest("/lol-perks/v1/pages");
             HttpWebResponse response = (HttpWebResponse)await request.GetResponseAsync();
-            if (response.StatusCode == HttpStatusCode.NotFound)
-                return null;
             string result = ReadStream(response.GetResponseStream());
             Json.Value value = Json.Parser.Parse(result);
             return value;
+        }
+
+        public async Task<Json.Value> GetCurrentRunePageAsync()
+        {
+            HttpWebRequest request = AuthRequest.CreateRequest("/lol-perks/v1/currentpage");
+            try
+            {
+                HttpWebResponse response = (HttpWebResponse)await request.GetResponseAsync();
+                string result = ReadStream(response.GetResponseStream());
+                Json.Value value = Json.Parser.Parse(result);
+                return value;
+            }
+            catch (Exception)
+            {
+                return null;
+            }
+            
         }
 
         public async Task<bool> DeleteRunePageAsync(ulong id)
@@ -88,10 +103,18 @@ namespace RuneRepo.ClientUx
             newStream.Write(data, 0, data.Length);
             newStream.Close();
 
-            HttpWebResponse response = (HttpWebResponse)await request.GetResponseAsync();
-            if (response.StatusCode == HttpStatusCode.OK)
-                return true;
-            return false;
+            try
+            {
+                HttpWebResponse response = (HttpWebResponse)await request.GetResponseAsync();
+                if (response.StatusCode == HttpStatusCode.OK)
+                    return true;
+                return false;
+            }
+            catch (WebException ex)
+            {
+                return false;
+            }
+            
         }
 
 

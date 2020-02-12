@@ -37,17 +37,31 @@ namespace RuneRepo
             {
                 Json.Value value = await RequestWrapper.GetCurrentRunePageAsync();
 
-                value.Remove("current");
-                value.Remove("id");
-                value.Remove("isActive");
-                value.Remove("isDeletable");
-                value.Remove("isEditable");
-                value.Remove("isValid");
-                value.Remove("lastModified");
-                value.Remove("order");
+                if(value != null)
+                {
+                    value.Remove("current");
+                    value.Remove("id");
+                    value.Remove("isActive");
+                    value.Remove("isDeletable");
+                    value.Remove("isEditable");
+                    value.Remove("isValid");
+                    value.Remove("lastModified");
+                    value.Remove("order");
 
-                AppendRunePage(value);
-                UpdateConfig();
+                    AppendRunePage(value);
+                    UpdateConfig();
+                }
+                else {
+                    MessagePopup messagePopup = new MessagePopup("Please select a page, try again?");
+                    messagePopup.Decided += delegate (bool result)
+                    {
+                        if (result)
+                        {
+                            NewRunePageItem_StoreNew();
+                        }
+                        MainViewGrid.Children.Remove(messagePopup);
+                    };
+                }
             }
             else
             {
@@ -190,7 +204,20 @@ namespace RuneRepo
                         await RequestWrapper.DeleteRunePageAsync(selectedId);
                 }
                 value["order"] = order;
-                await RequestWrapper.AddRunePageAsync(value);
+                if(!await RequestWrapper.AddRunePageAsync(value))
+                {
+                    Json.Value pages = await RequestWrapper.GetRunePages();
+                    foreach(Json.Value pageJson in pages)
+                    {
+                        if (pageJson["isDeletable"])
+                        {
+                            value["order"] = pageJson["order"];
+                            await RequestWrapper.DeleteRunePageAsync(pageJson["id"]);
+                            await RequestWrapper.AddRunePageAsync(value);
+                            break;
+                        }
+                    }
+                }
             }
             else
             {
