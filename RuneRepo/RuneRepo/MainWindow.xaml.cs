@@ -2,6 +2,7 @@
 using RuneRepo.ClientUx;
 using System;
 using System.IO;
+using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
@@ -86,6 +87,9 @@ namespace RuneRepo
             runePageItem.Updated += RunePageItem_Updated;
             runePageItem.MouseMove += RunePageItem_MouseMove;
             RunePagePanel.Children.Insert(RunePagePanel.Children.Count - 1, runePageItem);
+
+            Border border = new Border() { Height = 277, Width = 176, Margin = new Thickness(14), Background = new SolidColorBrush(Colors.Black)};
+            RunePagePanelDummy.Children.Add(border);
         }
 
         private bool dragInit = false;
@@ -125,10 +129,12 @@ namespace RuneRepo
             Canvas.SetLeft(DragViewImage, overCanvasPoint.X - draggingPageItem.SnapShotMousePosition.X);
             Canvas.SetTop(DragViewImage, overCanvasPoint.Y - draggingPageItem.SnapShotMousePosition.Y);
 
-            HitTestResult hitTestResult = VisualTreeHelper.HitTest(RunePagePanel, e.GetPosition(RunePagePanel));
+            HitTestResult hitTestResult = VisualTreeHelper.HitTest(RunePagePanelDummy, e.GetPosition(RunePagePanelDummy));
             if (hitTestResult != null)
             {
-                RunePageItem dragOverPageItem = FindVisualParent<RunePageItem>(hitTestResult.VisualHit);
+                Border dragOverPageItemDummy = FindVisualParent<Border>(hitTestResult.VisualHit);
+                int overIndex = RunePagePanelDummy.Children.IndexOf(dragOverPageItemDummy);
+                RunePageItem dragOverPageItem = (RunePageItem)RunePagePanel.Children[overIndex];
                 if (dragOverPageItem != null && dragOverPageItem != draggingPageItem)
                 {
                     int newIndex = RunePagePanel.Children.IndexOf(dragOverPageItem);
@@ -163,6 +169,7 @@ namespace RuneRepo
                 if (result)
                 {
                     RunePagePanel.Children.Remove(runePageItem);
+                    RunePagePanelDummy.Children.RemoveAt(RunePagePanelDummy.Children.Count - 1);
                     UpdateConfig();
                 }
                 MainViewGrid.Children.Remove(messagePopup);
@@ -215,7 +222,7 @@ namespace RuneRepo
             }
         }
 
-        private async System.Threading.Tasks.Task<bool> ValidateRequestWrapperAsync()
+        private async Task<bool> ValidateRequestWrapperAsync()
         {
             if(RequestWrapper != null)
             {
