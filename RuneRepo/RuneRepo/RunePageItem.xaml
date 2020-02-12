@@ -32,12 +32,12 @@
                     <Storyboard>
                         <ThicknessAnimation Storyboard.TargetName="BackgroundGrid" Storyboard.TargetProperty="Margin" BeginTime="00:00:00.000" Duration="00:00:00.200" To="-3">
                             <ThicknessAnimation.EasingFunction>
-                                <CubicEase EasingMode="EaseIn"/>
+                                <CubicEase EasingMode="EaseOut"/>
                             </ThicknessAnimation.EasingFunction>
                         </ThicknessAnimation>
                         <DoubleAnimation Storyboard.TargetName="InfoBorder" Storyboard.TargetProperty="Opacity" BeginTime="00:00:00.000" Duration="00:00:00.200" To="0">
                             <DoubleAnimation.EasingFunction>
-                                <CubicEase EasingMode="EaseIn"/>
+                                <CubicEase EasingMode="EaseOut"/>
                             </DoubleAnimation.EasingFunction>
                         </DoubleAnimation>
                         <DoubleAnimation Storyboard.TargetName="SpitlineStop" Storyboard.TargetProperty="Offset" BeginTime="00:00:00.000" Duration="00:00:00.200" To="1"/>
