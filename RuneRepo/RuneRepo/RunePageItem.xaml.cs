@@ -95,6 +95,11 @@ namespace RuneRepo
 
         private void SetSecond(int primaryStyleId, int subStyleId)
         {
+            if (subStyleId == -1)
+            {
+                SecondImage.Source = null;
+                return;
+            }
             SecondImage.Source = new BitmapImage(new Uri(string.Format("pack://application:,,,/RuneRepo;component/images/construct/{0}/second/{1}.png", primaryStyleId, subStyleId)));
         }
 
@@ -105,6 +110,11 @@ namespace RuneRepo
 
         private void SetKeystone(int primaryStyleId, int perkId)
         {
+            if (perkId == -1)
+            {
+                KeystoneImage.Source = null;
+                return;
+            }
             KeystoneImage.Source = new BitmapImage(new Uri(string.Format("pack://application:,,,/RuneRepo;component/images/construct/{0}/keystones/{1}.png", primaryStyleId, perkId)));
         }
 
