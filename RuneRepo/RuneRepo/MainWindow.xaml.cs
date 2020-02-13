@@ -285,22 +285,32 @@ namespace RuneRepo
 
         private void RunePageDummy_ScrollChanged(object sender, ScrollChangedEventArgs e)
         {
-            ScrollBar verticalDummy = (ScrollBar)RunePageDummy.Template.FindName("PART_VerticalScrollBarDummy", RunePageDummy);
-            ScrollBar horizontalDummy = (ScrollBar)RunePageDummy.Template.FindName("PART_HorizontalScrollBarDummy", RunePageDummy);
+            if(e.HorizontalChange != 0 || e.VerticalChange != 0)
+            {
+                Storyboard storyboard = new Storyboard();
 
-            Storyboard storyboard = new Storyboard();
+                if(e.HorizontalChange != 0)
+                {
+                    ScrollBar horizontalDummy = (ScrollBar)RunePageDummy.Template.FindName("PART_HorizontalScrollBarDummy", RunePageDummy);
 
-            DoubleAnimation verticalAnimation = new DoubleAnimation() { To = e.VerticalOffset, Duration = TimeSpan.FromSeconds(0.2), EasingFunction = new CubicEase() { EasingMode = EasingMode.EaseOut } };
-            Storyboard.SetTarget(verticalAnimation, verticalDummy);
-            Storyboard.SetTargetProperty(verticalAnimation, new PropertyPath(ScrollBar.ValueProperty));
-            storyboard.Children.Add(verticalAnimation);
+                    DoubleAnimation horizontalAnimation = new DoubleAnimation() { To = e.VerticalOffset, Duration = TimeSpan.FromSeconds(0.2), EasingFunction = new CubicEase() { EasingMode = EasingMode.EaseOut } };
+                    Storyboard.SetTarget(horizontalAnimation, horizontalDummy);
+                    Storyboard.SetTargetProperty(horizontalAnimation, new PropertyPath(ScrollBar.ValueProperty));
+                    storyboard.Children.Add(horizontalAnimation);
+                }
 
-            DoubleAnimation horizontalAnimation = new DoubleAnimation() { To = e.VerticalOffset, Duration = TimeSpan.FromSeconds(0.2), EasingFunction = new CubicEase() { EasingMode = EasingMode.EaseOut } };
-            Storyboard.SetTarget(horizontalAnimation, horizontalDummy);
-            Storyboard.SetTargetProperty(horizontalAnimation, new PropertyPath(ScrollBar.ValueProperty));
-            storyboard.Children.Add(horizontalAnimation);
+                if (e.VerticalChange != 0)
+                {
+                    ScrollBar verticalDummy = (ScrollBar)RunePageDummy.Template.FindName("PART_VerticalScrollBarDummy", RunePageDummy);
 
-            storyboard.Begin();
+                    DoubleAnimation verticalAnimation = new DoubleAnimation() { To = e.VerticalOffset, Duration = TimeSpan.FromSeconds(0.2), EasingFunction = new CubicEase() { EasingMode = EasingMode.EaseOut } };
+                    Storyboard.SetTarget(verticalAnimation, verticalDummy);
+                    Storyboard.SetTargetProperty(verticalAnimation, new PropertyPath(ScrollBar.ValueProperty));
+                    storyboard.Children.Add(verticalAnimation);
+                }
+
+                storyboard.Begin();
+            }
         }
     }
 }
