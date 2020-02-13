@@ -37,7 +37,7 @@
 
             <Border Grid.Row="1" BorderBrush="#50ffffff" BorderThickness="0,1,0,0">
                 <Grid x:Name="MainViewGrid">
-                    <ScrollViewer x:Name="RunePageDummy" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" VerticalScrollBarVisibility="Auto" AllowDrop="True" DragOver="RunePageViewer_DragOver" UseLayoutRounding="True" ScrollChanged="RunePageDummy_ScrollChanged">
+                    <ScrollViewer x:Name="RunePageDummy" CanContentScroll="True" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" VerticalScrollBarVisibility="Auto" AllowDrop="True" DragOver="RunePageViewer_DragOver" UseLayoutRounding="True" ScrollChanged="RunePageDummy_ScrollChanged">
                         <ScrollViewer.Resources>
                             <Style x:Key="RepeatButtonTransparent" TargetType="{x:Type RepeatButton}">
                                 <Setter Property="OverridesDefaultStyle" Value="true"/>
@@ -253,24 +253,27 @@
                                 </Setter>
                             </Style>
                         </ScrollViewer.Style>
-                        <Grid x:Name="RunePagePanelGrid">
-                            <WrapPanel x:Name="RunePagePanelDummy" HorizontalAlignment="Center" Visibility="Hidden"/>
-                            <WrapPanel x:Name="RunePagePanel" Background="Transparent" HorizontalAlignment="Center">
-                                <b:Interaction.Behaviors>
-                                    <b:FluidMoveBehavior Duration="00:00:00.200" AppliesTo="Children">
-                                        <b:FluidMoveBehavior.EaseY>
-                                            <CubicEase EasingMode="EaseOut"/>
-                                        </b:FluidMoveBehavior.EaseY>
-                                        <b:FluidMoveBehavior.EaseX>
-                                            <CubicEase EasingMode="EaseOut"/>
-                                        </b:FluidMoveBehavior.EaseX>
-                                    </b:FluidMoveBehavior>
-                                </b:Interaction.Behaviors>
-                            </WrapPanel>
-                            <Canvas x:Name="DragViewCanvas" IsHitTestVisible="False" Opacity="0.75">
-                                <Image x:Name="DragViewImage"/>
-                            </Canvas>
-                        </Grid>
+                        <local:SmoothScrollGrid>
+                            <Grid x:Name="RunePagePanelGrid">
+                                <WrapPanel x:Name="RunePagePanelDummy" HorizontalAlignment="Center" Visibility="Hidden"/>
+                                <WrapPanel x:Name="RunePagePanel" Background="Transparent" HorizontalAlignment="Center">
+                                    <b:Interaction.Behaviors>
+                                        <b:FluidMoveBehavior Duration="00:00:00.200" AppliesTo="Children">
+                                            <b:FluidMoveBehavior.EaseY>
+                                                <CubicEase EasingMode="EaseOut"/>
+                                            </b:FluidMoveBehavior.EaseY>
+                                            <b:FluidMoveBehavior.EaseX>
+                                                <CubicEase EasingMode="EaseOut"/>
+                                            </b:FluidMoveBehavior.EaseX>
+                                        </b:FluidMoveBehavior>
+                                    </b:Interaction.Behaviors>
+                                </WrapPanel>
+                                <Canvas x:Name="DragViewCanvas" IsHitTestVisible="False" Opacity="0.75">
+                                    <Image x:Name="DragViewImage"/>
+                                </Canvas>
+                            </Grid>
+
+                        </local:SmoothScrollGrid>
                     </ScrollViewer>
                 </Grid>
             </Border>

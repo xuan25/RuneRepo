@@ -105,6 +105,7 @@
     <Compile Include="RunePageItem.xaml.cs">
       <DependentUpon>RunePageItem.xaml</DependentUpon>
     </Compile>
+    <Compile Include="SmoothScrollGrid.cs" />
     <Compile Include="TextButton.xaml.cs">
       <DependentUpon>TextButton.xaml</DependentUpon>
     </Compile>
