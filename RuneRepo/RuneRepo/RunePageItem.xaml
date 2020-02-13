@@ -184,13 +184,13 @@
                 </local:RoundButton>
             </Grid>
         </Border>
-        <Grid Height="75" HorizontalAlignment="Stretch" VerticalAlignment="Bottom" Margin="15,0,0,0">
+        <Grid Height="100" HorizontalAlignment="Stretch" VerticalAlignment="Bottom" Margin="15,0,0,0">
             <Grid.RowDefinitions>
-                <RowDefinition Height="25"/>
+                <RowDefinition Height="50"/>
                 <RowDefinition Height="1"/>
                 <RowDefinition Height="*"/>
             </Grid.RowDefinitions>
-            <TextBlock x:Name="NameBox" Text="{Binding PageName}" Foreground="#eae0cd" FontWeight="Bold"/>
+            <TextBlock Grid.Row="0" x:Name="NameBox" Text="{Binding PageName}" Foreground="#eae0cd" FontWeight="Bold" Margin="0,0,15,10" VerticalAlignment="Bottom" TextWrapping="Wrap" TextTrimming="CharacterEllipsis"/>
             <Grid Grid.Row="1">
                 <Grid.Background>
                     <LinearGradientBrush StartPoint="0,0" EndPoint="1,0">
