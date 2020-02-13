@@ -5,8 +5,10 @@ using System.IO;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
+using System.Windows.Controls.Primitives;
 using System.Windows.Input;
 using System.Windows.Media;
+using System.Windows.Media.Animation;
 
 namespace RuneRepo
 {
@@ -279,6 +281,26 @@ namespace RuneRepo
         private void MinimizeWindowBtn_Clicked(object sender, MouseButtonEventArgs e)
         {
             this.WindowState = WindowState.Minimized;
+        }
+
+        private void RunePageDummy_ScrollChanged(object sender, ScrollChangedEventArgs e)
+        {
+            ScrollBar verticalDummy = (ScrollBar)RunePageDummy.Template.FindName("PART_VerticalScrollBarDummy", RunePageDummy);
+            ScrollBar horizontalDummy = (ScrollBar)RunePageDummy.Template.FindName("PART_HorizontalScrollBarDummy", RunePageDummy);
+
+            Storyboard storyboard = new Storyboard();
+
+            DoubleAnimation verticalAnimation = new DoubleAnimation() { To = e.VerticalOffset, Duration = TimeSpan.FromSeconds(0.2), EasingFunction = new CubicEase() { EasingMode = EasingMode.EaseOut } };
+            Storyboard.SetTarget(verticalAnimation, verticalDummy);
+            Storyboard.SetTargetProperty(verticalAnimation, new PropertyPath(ScrollBar.ValueProperty));
+            storyboard.Children.Add(verticalAnimation);
+
+            DoubleAnimation horizontalAnimation = new DoubleAnimation() { To = e.VerticalOffset, Duration = TimeSpan.FromSeconds(0.2), EasingFunction = new CubicEase() { EasingMode = EasingMode.EaseOut } };
+            Storyboard.SetTarget(horizontalAnimation, horizontalDummy);
+            Storyboard.SetTargetProperty(horizontalAnimation, new PropertyPath(ScrollBar.ValueProperty));
+            storyboard.Children.Add(horizontalAnimation);
+
+            storyboard.Begin();
         }
     }
 }
