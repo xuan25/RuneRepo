@@ -52,6 +52,93 @@
                                     </Setter.Value>
                                 </Setter>
                             </Style>
+                            <Style x:Key="ScrollBarStyleTransparent" TargetType="{x:Type ScrollBar}">
+                                <Setter Property="Stylus.IsPressAndHoldEnabled" Value="false"/>
+                                <Setter Property="Stylus.IsFlicksEnabled" Value="false"/>
+                                <Setter Property="Background" Value="Transparent"/>
+                                <Setter Property="BorderBrush" Value="Transparent"/>
+                                <Setter Property="Foreground" Value="{DynamicResource {x:Static SystemColors.ControlTextBrushKey}}"/>
+                                <Setter Property="BorderThickness" Value="0"/>
+                                <Setter Property="Width" Value="5"/>
+                                <Setter Property="MinWidth" Value="5"/>
+                                <Setter Property="Template">
+                                    <Setter.Value>
+                                        <ControlTemplate TargetType="{x:Type ScrollBar}">
+                                            <Grid x:Name="Bg" SnapsToDevicePixels="true">
+                                                <Border BorderBrush="{TemplateBinding BorderBrush}" BorderThickness="{TemplateBinding BorderThickness}" Background="{TemplateBinding Background}"/>
+                                                <Track x:Name="PART_Track" IsDirectionReversed="true" IsEnabled="{TemplateBinding IsMouseOver}">
+                                                    <Track.DecreaseRepeatButton>
+                                                        <RepeatButton Command="{x:Static ScrollBar.PageUpCommand}" Style="{StaticResource RepeatButtonTransparent}"/>
+                                                    </Track.DecreaseRepeatButton>
+                                                    <Track.IncreaseRepeatButton>
+                                                        <RepeatButton Command="{x:Static ScrollBar.PageDownCommand}" Style="{StaticResource RepeatButtonTransparent}"/>
+                                                    </Track.IncreaseRepeatButton>
+                                                    <Track.Thumb>
+                                                        <Thumb x:Name="PART_Thumb">
+                                                            <Thumb.Style>
+                                                                <Style TargetType="{x:Type Thumb}">
+                                                                    <Setter Property="OverridesDefaultStyle" Value="true"/>
+                                                                    <Setter Property="IsTabStop" Value="false"/>
+                                                                    <Setter Property="Template">
+                                                                        <Setter.Value>
+                                                                            <ControlTemplate TargetType="{x:Type Thumb}">
+                                                                                <Rectangle x:Name="rectangle" RadiusX="2" RadiusY="2" Fill="Transparent" Height="{TemplateBinding Height}" SnapsToDevicePixels="True" Width="{TemplateBinding Width}"/>
+                                                                            </ControlTemplate>
+                                                                        </Setter.Value>
+                                                                    </Setter>
+                                                                </Style>
+                                                            </Thumb.Style>
+                                                        </Thumb>
+                                                    </Track.Thumb>
+                                                </Track>
+                                            </Grid>
+                                        </ControlTemplate>
+                                    </Setter.Value>
+                                </Setter>
+                                <Style.Triggers>
+                                    <Trigger Property="Orientation" Value="Horizontal">
+                                        <Setter Property="Width" Value="Auto"/>
+                                        <Setter Property="MinWidth" Value="0"/>
+                                        <Setter Property="Height" Value="5"/>
+                                        <Setter Property="MinHeight" Value="5"/>
+                                        <Setter Property="BorderThickness" Value="0,1"/>
+                                        <Setter Property="Template">
+                                            <Setter.Value>
+                                                <ControlTemplate TargetType="{x:Type ScrollBar}">
+                                                    <Grid x:Name="Bg" SnapsToDevicePixels="true">
+                                                        <Border BorderBrush="{TemplateBinding BorderBrush}" BorderThickness="{TemplateBinding BorderThickness}" Background="{TemplateBinding Background}"/>
+                                                        <Track x:Name="PART_Track" IsEnabled="{TemplateBinding IsMouseOver}">
+                                                            <Track.DecreaseRepeatButton>
+                                                                <RepeatButton Command="{x:Static ScrollBar.PageLeftCommand}" Style="{StaticResource RepeatButtonTransparent}"/>
+                                                            </Track.DecreaseRepeatButton>
+                                                            <Track.IncreaseRepeatButton>
+                                                                <RepeatButton Command="{x:Static ScrollBar.PageRightCommand}" Style="{StaticResource RepeatButtonTransparent}"/>
+                                                            </Track.IncreaseRepeatButton>
+                                                            <Track.Thumb>
+                                                                <Thumb>
+                                                                    <Thumb.Style>
+                                                                        <Style TargetType="{x:Type Thumb}">
+                                                                            <Setter Property="OverridesDefaultStyle" Value="true"/>
+                                                                            <Setter Property="IsTabStop" Value="false"/>
+                                                                            <Setter Property="Template">
+                                                                                <Setter.Value>
+                                                                                    <ControlTemplate TargetType="{x:Type Thumb}">
+                                                                                        <Rectangle x:Name="rectangle" RadiusX="2" RadiusY="2" Fill="Transparent" Height="{TemplateBinding Height}" SnapsToDevicePixels="True" Width="{TemplateBinding Width}"/>
+                                                                                    </ControlTemplate>
+                                                                                </Setter.Value>
+                                                                            </Setter>
+                                                                        </Style>
+                                                                    </Thumb.Style>
+                                                                </Thumb>
+                                                            </Track.Thumb>
+                                                        </Track>
+                                                    </Grid>
+                                                </ControlTemplate>
+                                            </Setter.Value>
+                                        </Setter>
+                                    </Trigger>
+                                </Style.Triggers>
+                            </Style>
                             <Style x:Key="ScrollBarStyle" TargetType="{x:Type ScrollBar}">
                                 <Setter Property="Stylus.IsPressAndHoldEnabled" Value="false"/>
                                 <Setter Property="Stylus.IsFlicksEnabled" Value="false"/>
@@ -74,7 +161,17 @@
                                                         <RepeatButton Command="{x:Static ScrollBar.PageDownCommand}" Style="{StaticResource RepeatButtonTransparent}"/>
                                                     </Track.IncreaseRepeatButton>
                                                     <Track.Thumb>
-                                                        <Thumb>
+                                                        <Thumb x:Name="PART_Thumb">
+                                                            <b:Interaction.Behaviors>
+                                                                <b:FluidMoveBehavior Duration="00:00:00.200" AppliesTo="Self">
+                                                                    <b:FluidMoveBehavior.EaseY>
+                                                                        <CubicEase EasingMode="EaseOut"/>
+                                                                    </b:FluidMoveBehavior.EaseY>
+                                                                    <b:FluidMoveBehavior.EaseX>
+                                                                        <CubicEase EasingMode="EaseOut"/>
+                                                                    </b:FluidMoveBehavior.EaseX>
+                                                                </b:FluidMoveBehavior>
+                                                            </b:Interaction.Behaviors>
                                                             <Thumb.Style>
                                                                 <Style TargetType="{x:Type Thumb}">
                                                                     <Setter Property="OverridesDefaultStyle" Value="true"/>
@@ -116,6 +213,16 @@
                                                             </Track.IncreaseRepeatButton>
                                                             <Track.Thumb>
                                                                 <Thumb>
+                                                                    <b:Interaction.Behaviors>
+                                                                        <b:FluidMoveBehavior Duration="00:00:00.200" AppliesTo="Children" IsActive="False">
+                                                                            <b:FluidMoveBehavior.EaseY>
+                                                                                <CubicEase EasingMode="EaseOut"/>
+                                                                            </b:FluidMoveBehavior.EaseY>
+                                                                            <b:FluidMoveBehavior.EaseX>
+                                                                                <CubicEase EasingMode="EaseOut"/>
+                                                                            </b:FluidMoveBehavior.EaseX>
+                                                                        </b:FluidMoveBehavior>
+                                                                    </b:Interaction.Behaviors>
                                                                     <Thumb.Style>
                                                                         <Style TargetType="{x:Type Thumb}">
                                                                             <Setter Property="OverridesDefaultStyle" Value="true"/>
@@ -155,9 +262,11 @@
                                                     <RowDefinition Height="Auto"/>
                                                 </Grid.RowDefinitions>
                                                 <Rectangle x:Name="Corner" Grid.Column="1" Fill="{DynamicResource {x:Static SystemColors.ControlBrushKey}}" Grid.Row="1"/>
-                                                <ScrollContentPresenter x:Name="PART_ScrollContentPresenter" CanContentScroll="{TemplateBinding CanContentScroll}" CanHorizontallyScroll="False" CanVerticallyScroll="False" ContentTemplate="{TemplateBinding ContentTemplate}" Content="{TemplateBinding Content}" Grid.Column="0" Margin="{TemplateBinding Padding}" Grid.Row="0"/>
-                                                <ScrollBar x:Name="PART_VerticalScrollBar" AutomationProperties.AutomationId="VerticalScrollBar" Cursor="Arrow" Grid.Column="1" Maximum="{TemplateBinding ScrollableHeight}" Minimum="0" Grid.Row="0" Visibility="{TemplateBinding ComputedVerticalScrollBarVisibility}" Value="{Binding VerticalOffset, Mode=OneWay, RelativeSource={RelativeSource TemplatedParent}}" ViewportSize="{TemplateBinding ViewportHeight}" Style="{DynamicResource ScrollBarStyle}"/>
-                                                <ScrollBar x:Name="PART_HorizontalScrollBar" AutomationProperties.AutomationId="HorizontalScrollBar" Cursor="Arrow" Grid.Column="0" Maximum="{TemplateBinding ScrollableWidth}" Minimum="0" Orientation="Horizontal" Grid.Row="1" Visibility="{TemplateBinding ComputedHorizontalScrollBarVisibility}" Value="{Binding HorizontalOffset, Mode=OneWay, RelativeSource={RelativeSource TemplatedParent}}" ViewportSize="{TemplateBinding ViewportWidth}" Style="{DynamicResource ScrollBarStyle}"/>
+                                                <ScrollContentPresenter x:Name="PART_ScrollContentPresenter" CanContentScroll="{TemplateBinding CanContentScroll}" CanHorizontallyScroll="False" CanVerticallyScroll="False" ContentTemplate="{TemplateBinding ContentTemplate}" Content="{TemplateBinding Content}" Grid.Column="0" Margin="{TemplateBinding Padding}" Grid.Row="0"></ScrollContentPresenter>
+                                                <ScrollBar x:Name="PART_VerticalScrollBar" AutomationProperties.AutomationId="VerticalScrollBar" Cursor="Arrow" Grid.Column="1" Maximum="{TemplateBinding ScrollableHeight}" Minimum="0" Grid.Row="0" Visibility="{TemplateBinding ComputedVerticalScrollBarVisibility}" Value="{Binding VerticalOffset, Mode=OneWay, RelativeSource={RelativeSource TemplatedParent}}" ViewportSize="{TemplateBinding ViewportHeight}" Style="{DynamicResource ScrollBarStyleTransparent}"/>
+                                                <ScrollBar x:Name="PART_HorizontalScrollBar" AutomationProperties.AutomationId="HorizontalScrollBar" Cursor="Arrow" Grid.Column="0" Maximum="{TemplateBinding ScrollableWidth}" Minimum="0" Orientation="Horizontal" Grid.Row="1" Visibility="{TemplateBinding ComputedHorizontalScrollBarVisibility}" Value="{Binding HorizontalOffset, Mode=OneWay, RelativeSource={RelativeSource TemplatedParent}}" ViewportSize="{TemplateBinding ViewportWidth}" Style="{DynamicResource ScrollBarStyleTransparent}"/>
+                                                <ScrollBar x:Name="PART_VerticalScrollBarDummy" IsHitTestVisible="False" AutomationProperties.AutomationId="VerticalScrollBar" Cursor="Arrow" Grid.Column="1" Maximum="{TemplateBinding ScrollableHeight}" Minimum="0" Grid.Row="0" Visibility="{TemplateBinding ComputedVerticalScrollBarVisibility}" Value="{Binding VerticalOffset, Mode=OneWay, RelativeSource={RelativeSource TemplatedParent}}" ViewportSize="{TemplateBinding ViewportHeight}" Style="{DynamicResource ScrollBarStyle}"/>
+                                                <ScrollBar x:Name="PART_HorizontalScrollBarDummy" IsHitTestVisible="False" AutomationProperties.AutomationId="HorizontalScrollBar" Cursor="Arrow" Grid.Column="0" Maximum="{TemplateBinding ScrollableWidth}" Minimum="0" Orientation="Horizontal" Grid.Row="1" Visibility="{TemplateBinding ComputedHorizontalScrollBarVisibility}" Value="{Binding HorizontalOffset, Mode=OneWay, RelativeSource={RelativeSource TemplatedParent}}" ViewportSize="{TemplateBinding ViewportWidth}" Style="{DynamicResource ScrollBarStyle}"/>
                                             </Grid>
                                         </ControlTemplate>
                                     </Setter.Value>
@@ -165,6 +274,16 @@
                             </Style>
                         </ScrollViewer.Style>
                         <Grid x:Name="RunePagePanelGrid">
+                            <b:Interaction.Behaviors>
+                                <b:FluidMoveBehavior Duration="00:00:00.200" AppliesTo="Self" >
+                                    <b:FluidMoveBehavior.EaseY>
+                                        <CubicEase EasingMode="EaseOut"/>
+                                    </b:FluidMoveBehavior.EaseY>
+                                    <b:FluidMoveBehavior.EaseX>
+                                        <CubicEase EasingMode="EaseOut"/>
+                                    </b:FluidMoveBehavior.EaseX>
+                                </b:FluidMoveBehavior>
+                            </b:Interaction.Behaviors>
                             <WrapPanel x:Name="RunePagePanelDummy" HorizontalAlignment="Center" Visibility="Hidden"/>
                             <WrapPanel x:Name="RunePagePanel" Background="Transparent" HorizontalAlignment="Center">
                                 <b:Interaction.Behaviors>
