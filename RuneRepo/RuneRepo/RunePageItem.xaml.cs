@@ -45,9 +45,11 @@ namespace RuneRepo
         {
             get
             {
+                InfoBorder.Visibility = Visibility.Hidden;
                 RenderTargetBitmap renderTargetBitmap = new RenderTargetBitmap((int)MainGrid.RenderSize.Width, (int)MainGrid.RenderSize.Height, 96, 96, PixelFormats.Default);
                 renderTargetBitmap.Render(MainGrid);
                 renderTargetBitmap.Freeze();
+                InfoBorder.Visibility = Visibility.Visible;
                 return renderTargetBitmap;
             }
         }
