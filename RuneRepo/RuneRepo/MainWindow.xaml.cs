@@ -15,6 +15,9 @@ namespace RuneRepo
     /// </summary>
     public partial class MainWindow : Window
     {
+        private const string RepoFile = "repository.json";
+        private const string ConfigFile = "config.json";
+
         private RequestWrapper RequestWrapper = null;
         
         public MainWindow()
@@ -80,9 +83,9 @@ namespace RuneRepo
 
         private void LoadConfig()
         {
-            if (!File.Exists("Config.json"))
+            if (!File.Exists(RepoFile))
                 return;
-            using (StreamReader streamReader = new StreamReader("Config.json"))
+            using (StreamReader streamReader = new StreamReader(RepoFile))
             {
                 string config = streamReader.ReadToEnd();
                 Json.Value runePageArray = Json.Parser.Parse(config);
@@ -243,7 +246,7 @@ namespace RuneRepo
                 runePageArray.Add(((RunePageItem)RunePagePanel.Children[i]).Value);
             }
 
-            using (StreamWriter streamWriter = new StreamWriter("Config.json"))
+            using (StreamWriter streamWriter = new StreamWriter(RepoFile))
             {
                 streamWriter.Write(runePageArray.ToString());
             }
