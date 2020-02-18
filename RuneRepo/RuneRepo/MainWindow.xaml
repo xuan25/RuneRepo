@@ -6,7 +6,7 @@
         xmlns:local="clr-namespace:RuneRepo"
         xmlns:b="http://schemas.microsoft.com/xaml/behaviors" x:Class="RuneRepo.MainWindow"
         mc:Ignorable="d"
-        Title="MainWindow" Height="450" Width="800" MinHeight="340" MinWidth="230">
+        Title="RuneRepo" Height="450" Width="800" MinHeight="340" MinWidth="230">
     <WindowChrome.WindowChrome>
         <WindowChrome GlassFrameThickness="-1" UseAeroCaptionButtons="False" CaptionHeight="30"/>
     </WindowChrome.WindowChrome>
@@ -20,7 +20,7 @@
                 <RowDefinition Height="*"/>
             </Grid.RowDefinitions>
             <Grid Grid.Row="0" Margin="0" VerticalAlignment="Stretch" HorizontalAlignment="Stretch" Background="#50000000">
-                <TextBlock Text="RuneRepo" Foreground="#eae0cd" FontWeight="Bold" VerticalAlignment="Center" HorizontalAlignment="Left" Margin="10,0,0,0"/>
+                <TextBlock Text="{Binding Path=Title, RelativeSource={RelativeSource Mode=FindAncestor, AncestorType={x:Type Window}}}" Foreground="#eae0cd" FontWeight="Bold" VerticalAlignment="Center" HorizontalAlignment="Left" Margin="10,0,0,0"/>
                 <StackPanel Orientation="Horizontal" FlowDirection="RightToLeft" HorizontalAlignment="Right" VerticalAlignment="Stretch" WindowChrome.IsHitTestVisibleInChrome="True" Width="137">
                     <local:IconButton x:Name="CloseWindowBtn" Margin="5,0" Clicked="CloseWindowBtn_Clicked" IconGeometry="M6,5 L5,6 L8,9 L8,10 L5,13 L6,14 L9,11 L9,11 L10,11 L13,14 L14,13 L11,10 L11,9 L11,9 L14,6 L13,5 L10,8 L9,8 z"/>
                     <local:IconButton x:Name="MaximizeWindowBtn" Margin="5,0" Clicked="MaximizeWindowBtn_Clicked">
