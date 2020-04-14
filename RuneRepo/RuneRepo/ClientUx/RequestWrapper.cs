@@ -157,6 +157,13 @@ namespace RuneRepo.ClientUx
                     while (!streamReader.EndOfStream)
                     {
                         line = streamReader.ReadLine().Trim();
+                        // Tencent client contains a param "-q" which is different from the riot client
+                        if (line.StartsWith("-q"))
+                        {
+                            string q = streamReader.ReadLine().Trim();
+                            argsDict.Add("q", q);
+                            continue;
+                        }
                         if (!line.StartsWith("--"))
                             break;
                         string[] argPair = line.Substring(2).Split('=');
