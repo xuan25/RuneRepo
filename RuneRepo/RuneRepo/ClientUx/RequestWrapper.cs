@@ -16,7 +16,7 @@ namespace RuneRepo.ClientUx
             {
                 try
                 {
-                    GetAuthTokenAsync().Wait();
+                    GetUxStatusAsync().Wait();
                 }
                 catch (Exception)
                 {
@@ -38,7 +38,7 @@ namespace RuneRepo.ClientUx
         {
             try
             {
-                await GetAuthTokenAsync();
+                await GetUxStatusAsync();
             }
             catch (Exception)
             {
@@ -49,9 +49,9 @@ namespace RuneRepo.ClientUx
 
 
 
-        public async Task<string> GetAuthTokenAsync()
+        public async Task<string> GetUxStatusAsync()
         {
-            HttpWebRequest request = AuthRequest.CreateRequest("/riotclient/auth-token");
+            HttpWebRequest request = AuthRequest.CreateRequest("/riotclient/ux-state");
             HttpWebResponse response = (HttpWebResponse)await request.GetResponseAsync();
             string token = ReadStream(response.GetResponseStream()).Trim('"');
             return token;
@@ -116,6 +116,8 @@ namespace RuneRepo.ClientUx
             }
             
         }
+
+
 
         private string ReadStream(Stream stream)
         {
