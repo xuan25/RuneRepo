@@ -30,7 +30,7 @@ namespace RuneRepo.ClientUx
 
         public RequestWrapper(string lolPath)
         {
-            Dictionary<string, string> argsDict = GetClientUxStartupArgs(lolPath);
+            Dictionary<string, string> argsDict = GetRemotingArgs(lolPath);
             AuthRequest = new AuthRequestUtil(argsDict["app-port"], argsDict["remoting-auth-token"]);
         }
 
@@ -117,8 +117,6 @@ namespace RuneRepo.ClientUx
             
         }
 
-
-
         private string ReadStream(Stream stream)
         {
             using (StreamReader streamReader = new StreamReader(stream))
@@ -128,52 +126,35 @@ namespace RuneRepo.ClientUx
             }
         }
 
-        private Dictionary<string, string> GetClientUxStartupArgs(string lolPath)
+        private Dictionary<string, string> GetRemotingArgs(string lolPath)
         {
             DirectoryInfo lolDirectoryInfo = new DirectoryInfo(lolPath);
 
             if (!lolDirectoryInfo.Exists)
-                throw new Exception();
+                throw new Exception("LoL directory not found.");
 
-            string logPath = Path.Combine(lolDirectoryInfo.FullName, @"Logs\LeagueClient Logs");
-            DirectoryInfo logDirectoryInfo = new DirectoryInfo(logPath);
+            string lockfilePath = Path.Combine(lolDirectoryInfo.FullName, "lockfile");
+            if (!File.Exists(lockfilePath))
+                throw new Exception("Lockfile not found.");
 
-            List<FileInfo> logFileInfos = new List<FileInfo>(logDirectoryInfo.GetFiles("*LeagueClientUx.log", SearchOption.TopDirectoryOnly));
-            logFileInfos.Sort((a, b) => { return (int)(b.CreationTimeUtc - a.CreationTimeUtc).TotalSeconds; });
-            FileInfo logFileInfo = logFileInfos[0];
-
-            Dictionary<string, string> argsDict = new Dictionary<string, string>();
-            using (FileStream fileStream = new FileStream(logFileInfo.FullName, FileMode.Open, FileAccess.Read, FileShare.ReadWrite))
+            string lockfileContent = null;
+            using (FileStream fileStream = new FileStream(lockfilePath, FileMode.Open, FileAccess.Read, FileShare.ReadWrite))
             {
                 using (StreamReader streamReader = new StreamReader(fileStream))
                 {
-                    string line;
-                    while (!streamReader.EndOfStream)
-                    {
-                        line = streamReader.ReadLine().Trim();
-                        if (line.EndsWith("Command line arguments:"))
-                            break;
-                    }
-                    while (!streamReader.EndOfStream)
-                    {
-                        line = streamReader.ReadLine().Trim();
-                        // Tencent client contains a param "-q" which is different from the riot client
-                        if (line.StartsWith("-q"))
-                        {
-                            string q = streamReader.ReadLine().Trim();
-                            argsDict.Add("q", q);
-                            continue;
-                        }
-                        if (!line.StartsWith("--"))
-                            break;
-                        string[] argPair = line.Substring(2).Split('=');
-                        if (argPair.Length == 2)
-                            argsDict.Add(argPair[0], argPair[1]);
-                        else
-                            argsDict.Add(argPair[0], null);
-                    }
+                    lockfileContent = streamReader.ReadToEnd();
                 }
             }
+            string[] paramArr = lockfileContent.Split(':');
+
+            Dictionary<string, string> argsDict = new Dictionary<string, string>
+            {
+                { "app-name", paramArr[0] },
+                { "app-pid", paramArr[1] },
+                { "app-port", paramArr[2] },
+                { "remoting-auth-token", paramArr[3] },
+                { "remoting-protocal", paramArr[4] }
+            };
 
             return argsDict;
         }
