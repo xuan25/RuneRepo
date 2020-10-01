@@ -41,13 +41,9 @@ namespace RuneRepo
             LoadRepo();
 
             Wrapper = new RequestWrapper();
-            Task.Factory.StartNew(async () =>
-            {
-                await Task.Delay(3000);
-                PhaseMonitor = new GameflowPhaseMonitor(Wrapper);
-                PhaseMonitor.PhaseChanged += PhaseMonitor_PhaseChanged;
-                PhaseMonitor.Start();
-            });
+            PhaseMonitor = new GameflowPhaseMonitor(Wrapper);
+            PhaseMonitor.PhaseChanged += PhaseMonitor_PhaseChanged;
+            PhaseMonitor.Start();
         }
 
         private void MainWindow_Closing(object sender, System.ComponentModel.CancelEventArgs e)
@@ -116,10 +112,6 @@ namespace RuneRepo
                     this.Activate();
                 }
                 else if(e.OldPhase == "ChampSelect")
-                {
-                    this.WindowState = WindowState.Minimized;
-                }
-                else if (e.OldPhase == null && !this.IsMouseOver)
                 {
                     this.WindowState = WindowState.Minimized;
                 }
