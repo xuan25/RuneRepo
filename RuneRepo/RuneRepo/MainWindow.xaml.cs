@@ -2,6 +2,7 @@
 using RuneRepo.ClientUx;
 using System;
 using System.IO;
+using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
 using System.Windows;
@@ -26,19 +27,82 @@ namespace RuneRepo
         {
             InitializeComponent();
             this.Loaded += MainWindow_Loaded;
+            this.Closing += MainWindow_Closing;
         }
 
         private void MainWindow_Loaded(object sender, RoutedEventArgs e)
         {
+            LoadConfig();
+
             NewRunePageItem newRunePageItem = new NewRunePageItem();
             newRunePageItem.StoreNew += NewRunePageItem_StoreNew;
             RunePagePanel.Children.Add(newRunePageItem);
-            LoadConfig();
+            LoadRepo();
 
-            Wrapper = new RequestWrapper();
-            PhaseMonitor = new GameflowPhaseMonitor(Wrapper);
-            PhaseMonitor.PhaseChanged += PhaseMonitor_PhaseChanged;
-            PhaseMonitor.Start();
+            Task.Factory.StartNew(async () =>
+            {
+                await Task.Delay(3000);
+                Wrapper = new RequestWrapper();
+                PhaseMonitor = new GameflowPhaseMonitor(Wrapper);
+                PhaseMonitor.PhaseChanged += PhaseMonitor_PhaseChanged;
+                PhaseMonitor.Start();
+            });
+        }
+
+        private void MainWindow_Closing(object sender, System.ComponentModel.CancelEventArgs e)
+        {
+            SaveConfig();
+        }
+
+        private void LoadConfig()
+        {
+            if (!File.Exists(ConfigFile))
+                return;
+            Json.Value json = null;
+            using (FileStream fileStream = new FileStream(ConfigFile, FileMode.Open, FileAccess.Read))
+            {
+                json = Json.Parser.Parse(fileStream);
+            }
+            if (json.Contains("width"))
+                this.Width = json["width"];
+            if (json.Contains("height"))
+                this.Height = json["height"];
+            if (json.Contains("left"))
+                this.Left = json["left"];
+            if (json.Contains("top"))
+                this.Top = json["top"];
+        }
+
+        private void SaveConfig()
+        {
+            Json.Value.Object json = new Json.Value.Object(new System.Collections.Generic.Dictionary<string, Json.Value>
+            {
+                { "width", this.Width },
+                { "height", this.Height },
+                { "left", this.Left },
+                { "top", this.Top }
+            });
+            using (FileStream fileStream = new FileStream(ConfigFile, FileMode.Create, FileAccess.Write))
+            {
+                string jsonStr = json.ToString();
+                byte[] bytes = Encoding.UTF8.GetBytes(jsonStr);
+                fileStream.Write(bytes, 0, bytes.Length);
+            }
+        }
+
+        private void LoadRepo()
+        {
+            if (!File.Exists(RepoFile))
+                return;
+            using (StreamReader streamReader = new StreamReader(RepoFile))
+            {
+                string config = streamReader.ReadToEnd();
+                Json.Value runePageArray = Json.Parser.Parse(config);
+                foreach (Json.Value value in runePageArray)
+                {
+                    AppendRunePage(value);
+                }
+            }
         }
 
         private void PhaseMonitor_PhaseChanged(object sender, GameflowPhaseMonitor.PhaseChangedArgs e)
@@ -50,7 +114,11 @@ namespace RuneRepo
                     this.WindowState = WindowState.Normal;
                     this.Activate();
                 }
-                if(e.OldPhase == "ChampSelect")
+                else if(e.OldPhase == "ChampSelect")
+                {
+                    this.WindowState = WindowState.Minimized;
+                }
+                else if (e.OldPhase == null && !this.IsMouseOver)
                 {
                     this.WindowState = WindowState.Minimized;
                 }
@@ -101,21 +169,6 @@ namespace RuneRepo
                     MainViewGrid.Children.Remove(messagePopup);
                 };
                 MainViewGrid.Children.Add(messagePopup);
-            }
-        }
-
-        private void LoadConfig()
-        {
-            if (!File.Exists(RepoFile))
-                return;
-            using (StreamReader streamReader = new StreamReader(RepoFile))
-            {
-                string config = streamReader.ReadToEnd();
-                Json.Value runePageArray = Json.Parser.Parse(config);
-                foreach (Json.Value value in runePageArray)
-                {
-                    AppendRunePage(value);
-                }
             }
         }
 
