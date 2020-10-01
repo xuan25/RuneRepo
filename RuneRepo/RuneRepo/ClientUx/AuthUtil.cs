@@ -4,7 +4,7 @@ using System.Text;
 
 namespace RuneRepo.ClientUx
 {
-    class AuthRequestUtil
+    class AuthUtil
     {
         private readonly string AppHost = "127.0.0.1";
         private readonly string AppPort;
@@ -16,7 +16,7 @@ namespace RuneRepo.ClientUx
 
         private readonly System.Net.Security.RemoteCertificateValidationCallback RemoteCertificateValidationCallback = new System.Net.Security.RemoteCertificateValidationCallback(CertificateValidation);
 
-        public AuthRequestUtil(string appPort, string remotingAuthToken)
+        public AuthUtil(string appPort, string remotingAuthToken)
         {
             AppPort = appPort;
             RemotingAuthToken = remotingAuthToken;

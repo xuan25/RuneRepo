@@ -35,38 +35,10 @@ namespace RuneRepo
             RunePagePanel.Children.Add(newRunePageItem);
             LoadConfig();
 
-            new Thread(() =>
-            {
-                while (true)
-                {
-                    if (FindUxClient())
-                        break;
-                    Thread.Sleep(500);
-                }
-            })
-            {
-                IsBackground = true,
-                Name = "FindUxClientThread"
-            }.Start();
-        }
-
-        private bool FindUxClient()
-        {
-            string lolPath = ClientLocator.GetLolPath();
-            if (lolPath != null)
-            {
-                Wrapper = new RequestWrapper(lolPath);
-                if (PhaseMonitor != null)
-                {
-                    PhaseMonitor.PhaseChanged -= PhaseMonitor_PhaseChanged;
-                    PhaseMonitor.Stop();
-                }
-                PhaseMonitor = new GameflowPhaseMonitor(Wrapper);
-                PhaseMonitor.PhaseChanged += PhaseMonitor_PhaseChanged;
-                PhaseMonitor.Start();
-                return true;
-            }
-            return false;
+            Wrapper = new RequestWrapper();
+            PhaseMonitor = new GameflowPhaseMonitor(Wrapper);
+            PhaseMonitor.PhaseChanged += PhaseMonitor_PhaseChanged;
+            PhaseMonitor.Start();
         }
 
         private void PhaseMonitor_PhaseChanged(object sender, GameflowPhaseMonitor.PhaseChangedArgs e)
@@ -85,25 +57,12 @@ namespace RuneRepo
             });
         }
 
-        private async Task<bool> ValidateRequestWrapperAsync()
-        {
-            if (Wrapper != null)
-            {
-                if (await Wrapper.CheckAvaliableAsync())
-                    return true;
-            }
-            if (FindUxClient())
-                return await Wrapper.CheckAvaliableAsync();
-            return false;
-        }
-
         private async void NewRunePageItem_StoreNew()
         {
-            if (await ValidateRequestWrapperAsync())
+            try
             {
                 Json.Value value = await Wrapper.GetCurrentRunePageAsync();
-
-                if(value != null)
+                if (value != null)
                 {
                     value.Remove("current");
                     value.Remove("id");
@@ -117,7 +76,8 @@ namespace RuneRepo
                     AppendRunePage(value);
                     UpdateConfig();
                 }
-                else {
+                else
+                {
                     MessagePopup messagePopup = new MessagePopup("Please select a page, try again?");
                     messagePopup.Decided += delegate (bool result)
                     {
@@ -129,7 +89,7 @@ namespace RuneRepo
                     };
                 }
             }
-            else
+            catch (RequestWrapper.NoClientException)
             {
                 MessagePopup messagePopup = new MessagePopup("Service currently unavailable, try again?");
                 messagePopup.Decided += delegate (bool result)
@@ -259,21 +219,21 @@ namespace RuneRepo
 
         private async void RunePageItem_Apply(Json.Value value)
         {
-            if (await ValidateRequestWrapperAsync())
+            try
             {
                 Json.Value currentPageJson = await Wrapper.GetCurrentRunePageAsync();
                 int order = 0;
-                if(currentPageJson != null)
+                if (currentPageJson != null)
                 {
                     ulong selectedId = currentPageJson["id"];
-                    if(currentPageJson["isDeletable"])
+                    if (currentPageJson["isDeletable"])
                         await Wrapper.DeleteRunePageAsync(selectedId);
                 }
                 value["order"] = order;
-                if(!await Wrapper.AddRunePageAsync(value))
+                if (!await Wrapper.AddRunePageAsync(value))
                 {
-                    Json.Value pages = await Wrapper.GetRunePages();
-                    foreach(Json.Value pageJson in pages)
+                    Json.Value pages = await Wrapper.GetRunePagesAsync();
+                    foreach (Json.Value pageJson in pages)
                     {
                         if (pageJson["isDeletable"])
                         {
@@ -285,7 +245,7 @@ namespace RuneRepo
                     }
                 }
             }
-            else
+            catch (RequestWrapper.NoClientException)
             {
                 MessagePopup messagePopup = new MessagePopup("Service currently unavailable, try again?");
                 messagePopup.Decided += delegate (bool result)

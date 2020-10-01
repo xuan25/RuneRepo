@@ -10,130 +10,55 @@ namespace RuneRepo.ClientUx
 {
     class RequestWrapper
     {
-        public bool IsAvaliable
+        private AuthUtil Auth;
+
+        public RequestWrapper()
         {
-            get
+
+        }
+
+        private async Task<bool> PrepareAsync()
+        {
+            if(Auth != null)
             {
                 try
                 {
-                    GetUxStatusAsync().Wait();
+                    HttpWebRequest request = Auth.CreateRequest("/riotclient/ux-state");
+                    HttpWebResponse response = (HttpWebResponse)await request.GetResponseAsync();
+                    string empty = ReadStream(response.GetResponseStream()).Trim('"');
+                    return true;
                 }
                 catch (Exception)
                 {
-                    return false;
+                    Auth = null;
                 }
+            }
+            AuthUtil authUtil = GetAuth();
+            if (authUtil != null)
+            {
+                Auth = authUtil;
                 return true;
             }
-        }
-
-        private readonly AuthRequestUtil AuthRequest;
-
-        public RequestWrapper(string lolPath)
-        {
-            Dictionary<string, string> argsDict = GetRemotingArgs(lolPath);
-            AuthRequest = new AuthRequestUtil(argsDict["app-port"], argsDict["remoting-auth-token"]);
-        }
-
-        public async Task<bool> CheckAvaliableAsync()
-        {
-            try
-            {
-                await GetUxStatusAsync();
-            }
-            catch (Exception)
-            {
-                return false;
-            }
-            return true;
-        }
-
-
-
-        public async Task<string> GetUxStatusAsync()
-        {
-            HttpWebRequest request = AuthRequest.CreateRequest("/riotclient/ux-state");
-            HttpWebResponse response = (HttpWebResponse)await request.GetResponseAsync();
-            string empty = ReadStream(response.GetResponseStream()).Trim('"');
-            return empty;
-        }
-
-        public string GetGameflowPhase()
-        {
-            HttpWebRequest request = AuthRequest.CreateRequest("/lol-gameflow/v1/gameflow-phase");
-            HttpWebResponse response = (HttpWebResponse)request.GetResponse();
-            string phase = ReadStream(response.GetResponseStream()).Trim('"');
-            return phase;
-        }
-
-        public async Task<Json.Value> GetRunePages()
-        {
-            HttpWebRequest request = AuthRequest.CreateRequest("/lol-perks/v1/pages");
-            HttpWebResponse response = (HttpWebResponse)await request.GetResponseAsync();
-            string result = ReadStream(response.GetResponseStream());
-            Json.Value value = Json.Parser.Parse(result);
-            return value;
-        }
-
-        public async Task<Json.Value> GetCurrentRunePageAsync()
-        {
-            HttpWebRequest request = AuthRequest.CreateRequest("/lol-perks/v1/currentpage");
-            try
-            {
-                HttpWebResponse response = (HttpWebResponse)await request.GetResponseAsync();
-                string result = ReadStream(response.GetResponseStream());
-                Json.Value value = Json.Parser.Parse(result);
-                return value;
-            }
-            catch (Exception)
-            {
-                return null;
-            }
-            
-        }
-
-        public async Task<bool> DeleteRunePageAsync(ulong id)
-        {
-            HttpWebRequest request = AuthRequest.CreateRequest(string.Format("/lol-perks/v1/pages/{0}", id));
-            request.Method = "DELETE";
-            HttpWebResponse response = (HttpWebResponse)await request.GetResponseAsync();
-            if(response.StatusCode == HttpStatusCode.NoContent)
-                return true;
             return false;
         }
 
-        public async Task<bool> AddRunePageAsync(Json.Value pageJson)
+        private AuthUtil GetAuth()
         {
-            HttpWebRequest request = AuthRequest.CreateRequest("/lol-perks/v1/pages");
-            request.Method = "POST";
-
-            byte[] data = Encoding.UTF8.GetBytes(pageJson.ToString());
-            Stream newStream = request.GetRequestStream();
-            newStream.Write(data, 0, data.Length);
-            newStream.Close();
-
+            string lolPath = ClientLocator.GetLolPath();
+            if (lolPath == null)
+                return null;
+            Dictionary<string, string> argsDict = null;
             try
             {
-                HttpWebResponse response = (HttpWebResponse)await request.GetResponseAsync();
-                if (response.StatusCode == HttpStatusCode.OK)
-                    return true;
-                return false;
+                argsDict = GetRemotingArgs(lolPath);
             }
-            catch (WebException ex)
+            catch (Exception ex)
             {
-                return false;
+                Console.WriteLine(ex);
+                return null;
             }
-            
-        }
-
-
-
-        private string ReadStream(Stream stream)
-        {
-            using (StreamReader streamReader = new StreamReader(stream))
-            {
-                string result = streamReader.ReadToEnd();
-                return result;
-            }
+            AuthUtil authRequest = new AuthUtil(argsDict["app-port"], argsDict["remoting-auth-token"]);
+            return authRequest;
         }
 
         private Dictionary<string, string> GetRemotingArgs(string lolPath)
@@ -168,5 +93,98 @@ namespace RuneRepo.ClientUx
 
             return argsDict;
         }
+
+        public class NoClientException : Exception { }
+
+        public async Task<string> GetGameflowPhaseAsync()
+        {
+            if (!await PrepareAsync())
+                throw new NoClientException();
+            HttpWebRequest request = Auth.CreateRequest("/lol-gameflow/v1/gameflow-phase");
+            HttpWebResponse response = (HttpWebResponse)request.GetResponse();
+            string phase = ReadStream(response.GetResponseStream()).Trim('"');
+            return phase;
+        }
+
+        public async Task<Json.Value> GetRunePagesAsync()
+        {
+            if (!await PrepareAsync())
+                throw new NoClientException();
+            HttpWebRequest request = Auth.CreateRequest("/lol-perks/v1/pages");
+            HttpWebResponse response = (HttpWebResponse)await request.GetResponseAsync();
+            string result = ReadStream(response.GetResponseStream());
+            Json.Value value = Json.Parser.Parse(result);
+            return value;
+        }
+
+        public async Task<Json.Value> GetCurrentRunePageAsync()
+        {
+            if (!await PrepareAsync())
+                throw new NoClientException();
+
+            HttpWebRequest request = Auth.CreateRequest("/lol-perks/v1/currentpage");
+            try
+            {
+                HttpWebResponse response = (HttpWebResponse)await request.GetResponseAsync();
+                string result = ReadStream(response.GetResponseStream());
+                Json.Value value = Json.Parser.Parse(result);
+                return value;
+            }
+            catch (Exception)
+            {
+                return null;
+            }
+            
+        }
+
+        public async Task<bool> DeleteRunePageAsync(ulong id)
+        {
+            if (!await PrepareAsync())
+                throw new NoClientException();
+
+            HttpWebRequest request = Auth.CreateRequest(string.Format("/lol-perks/v1/pages/{0}", id));
+            request.Method = "DELETE";
+            HttpWebResponse response = (HttpWebResponse)await request.GetResponseAsync();
+            if(response.StatusCode == HttpStatusCode.NoContent)
+                return true;
+            return false;
+        }
+
+        public async Task<bool> AddRunePageAsync(Json.Value pageJson)
+        {
+            if (!await PrepareAsync())
+                throw new NoClientException();
+
+            HttpWebRequest request = Auth.CreateRequest("/lol-perks/v1/pages");
+            request.Method = "POST";
+
+            byte[] data = Encoding.UTF8.GetBytes(pageJson.ToString());
+            Stream newStream = request.GetRequestStream();
+            newStream.Write(data, 0, data.Length);
+            newStream.Close();
+
+            try
+            {
+                HttpWebResponse response = (HttpWebResponse)await request.GetResponseAsync();
+                if (response.StatusCode == HttpStatusCode.OK)
+                    return true;
+                return false;
+            }
+            catch (WebException ex)
+            {
+                return false;
+            }
+            
+        }
+
+        private string ReadStream(Stream stream)
+        {
+            using (StreamReader streamReader = new StreamReader(stream))
+            {
+                string result = streamReader.ReadToEnd();
+                return result;
+            }
+        }
+
     }
 }

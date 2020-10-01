@@ -44,18 +44,22 @@ namespace RuneRepo.ClientUx
             if (MonitingThread != null)
                 return;
             
-            MonitingThread = new Thread(() =>
+            MonitingThread = new Thread(async () =>
             {
                 while (IsMoniting)
                 {
-                    if (Wrapper.IsAvaliable)
+                    try
                     {
-                        string phase = Wrapper.GetGameflowPhase();
+                        string phase = await Wrapper.GetGameflowPhaseAsync();
                         if (phase != LastPhase)
                         {
                             PhaseChanged?.Invoke(this, new PhaseChangedArgs(LastPhase, phase));
                         }
                         LastPhase = phase;
+                    }
+                    catch (RequestWrapper.NoClientException)
+                    {
+
                     }
                     Thread.Sleep(500);
                 }
