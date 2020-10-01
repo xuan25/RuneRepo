@@ -2,6 +2,7 @@
 using RuneRepo.ClientUx;
 using System;
 using System.IO;
+using System.Threading;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
@@ -18,8 +19,9 @@ namespace RuneRepo
         private const string RepoFile = "repository.json";
         private const string ConfigFile = "config.json";
 
-        private RequestWrapper RequestWrapper = null;
-        
+        private RequestWrapper Wrapper = null;
+        private GameflowPhaseMonitor PhaseMonitor = null;
+
         public MainWindow()
         {
             InitializeComponent();
@@ -32,13 +34,74 @@ namespace RuneRepo
             newRunePageItem.StoreNew += NewRunePageItem_StoreNew;
             RunePagePanel.Children.Add(newRunePageItem);
             LoadConfig();
+
+            new Thread(() =>
+            {
+                while (true)
+                {
+                    if (FindUxClient())
+                        break;
+                    Thread.Sleep(500);
+                }
+            })
+            {
+                IsBackground = true,
+                Name = "FindUxClientThread"
+            }.Start();
+        }
+
+        private bool FindUxClient()
+        {
+            string lolPath = ClientLocator.GetLolPath();
+            if (lolPath != null)
+            {
+                Wrapper = new RequestWrapper(lolPath);
+                if (PhaseMonitor != null)
+                {
+                    PhaseMonitor.PhaseChanged -= PhaseMonitor_PhaseChanged;
+                    PhaseMonitor.Stop();
+                }
+                PhaseMonitor = new GameflowPhaseMonitor(Wrapper);
+                PhaseMonitor.PhaseChanged += PhaseMonitor_PhaseChanged;
+                PhaseMonitor.Start();
+                return true;
+            }
+            return false;
+        }
+
+        private void PhaseMonitor_PhaseChanged(object sender, GameflowPhaseMonitor.PhaseChangedArgs e)
+        {
+            Dispatcher.Invoke(() =>
+            {
+                if(e.NewPhase == "ChampSelect")
+                {
+                    this.WindowState = WindowState.Normal;
+                    this.Activate();
+                }
+                if(e.OldPhase == "ChampSelect")
+                {
+                    this.WindowState = WindowState.Minimized;
+                }
+            });
+        }
+
+        private async Task<bool> ValidateRequestWrapperAsync()
+        {
+            if (Wrapper != null)
+            {
+                if (await Wrapper.CheckAvaliableAsync())
+                    return true;
+            }
+            if (FindUxClient())
+                return await Wrapper.CheckAvaliableAsync();
+            return false;
         }
 
         private async void NewRunePageItem_StoreNew()
         {
             if (await ValidateRequestWrapperAsync())
             {
-                Json.Value value = await RequestWrapper.GetCurrentRunePageAsync();
+                Json.Value value = await Wrapper.GetCurrentRunePageAsync();
 
                 if(value != null)
                 {
@@ -198,25 +261,25 @@ namespace RuneRepo
         {
             if (await ValidateRequestWrapperAsync())
             {
-                Json.Value currentPageJson = await RequestWrapper.GetCurrentRunePageAsync();
+                Json.Value currentPageJson = await Wrapper.GetCurrentRunePageAsync();
                 int order = 0;
                 if(currentPageJson != null)
                 {
                     ulong selectedId = currentPageJson["id"];
                     if(currentPageJson["isDeletable"])
-                        await RequestWrapper.DeleteRunePageAsync(selectedId);
+                        await Wrapper.DeleteRunePageAsync(selectedId);
                 }
                 value["order"] = order;
-                if(!await RequestWrapper.AddRunePageAsync(value))
+                if(!await Wrapper.AddRunePageAsync(value))
                 {
-                    Json.Value pages = await RequestWrapper.GetRunePages();
+                    Json.Value pages = await Wrapper.GetRunePages();
                     foreach(Json.Value pageJson in pages)
                     {
                         if (pageJson["isDeletable"])
                         {
                             value["order"] = pageJson["order"];
-                            await RequestWrapper.DeleteRunePageAsync(pageJson["id"]);
-                            await RequestWrapper.AddRunePageAsync(value);
+                            await Wrapper.DeleteRunePageAsync(pageJson["id"]);
+                            await Wrapper.AddRunePageAsync(value);
                             break;
                         }
                     }
@@ -250,20 +313,6 @@ namespace RuneRepo
             {
                 streamWriter.Write(runePageArray.ToString());
             }
-        }
-
-        private async Task<bool> ValidateRequestWrapperAsync()
-        {
-            if(RequestWrapper != null)
-            {
-                if (await RequestWrapper.CheckAvaliableAsync())
-                    return true;
-            }
-            string lolPath = ClientLocator.GetLolPath();
-            if (lolPath == null)
-                return false;
-            RequestWrapper = new RequestWrapper(lolPath);
-            return await RequestWrapper.CheckAvaliableAsync();
         }
 
         private void CloseWindowBtn_Clicked(object sender, MouseButtonEventArgs e)

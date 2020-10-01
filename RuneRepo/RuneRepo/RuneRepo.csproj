@@ -93,6 +93,7 @@
     </Compile>
     <Compile Include="ClientUx\AuthRequestUtil.cs" />
     <Compile Include="ClientUx\ClientLocator.cs" />
+    <Compile Include="ClientUx\GameflowPhaseMonitor.cs" />
     <Compile Include="ClientUx\RequestWrapper.cs" />
     <Compile Include="IconButton.xaml.cs">
       <DependentUpon>IconButton.xaml</DependentUpon>

@@ -53,8 +53,16 @@ namespace RuneRepo.ClientUx
         {
             HttpWebRequest request = AuthRequest.CreateRequest("/riotclient/ux-state");
             HttpWebResponse response = (HttpWebResponse)await request.GetResponseAsync();
-            string token = ReadStream(response.GetResponseStream()).Trim('"');
-            return token;
+            string empty = ReadStream(response.GetResponseStream()).Trim('"');
+            return empty;
+        }
+
+        public string GetGameflowPhase()
+        {
+            HttpWebRequest request = AuthRequest.CreateRequest("/lol-gameflow/v1/gameflow-phase");
+            HttpWebResponse response = (HttpWebResponse)request.GetResponse();
+            string phase = ReadStream(response.GetResponseStream()).Trim('"');
+            return phase;
         }
 
         public async Task<Json.Value> GetRunePages()
