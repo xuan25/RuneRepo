@@ -5,7 +5,7 @@ using System.Windows.Controls;
 using System.Windows.Input;
 using System.Windows.Media;
 
-namespace RuneRepo
+namespace RuneRepo.UI
 {
     /// <summary>
     /// Interaction logic for TextButton.xaml

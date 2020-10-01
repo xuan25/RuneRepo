@@ -1,7 +1,7 @@
 ﻿using System.Windows.Controls;
 using System.Windows.Input;
 
-namespace RuneRepo
+namespace RuneRepo.UI
 {
     /// <summary>
     /// Interaction logic for NewRunePageItem.xaml

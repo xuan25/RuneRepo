@@ -1,9 +1,9 @@
-﻿<UserControl x:Class="RuneRepo.IconButton"
+﻿<UserControl x:Class="RuneRepo.UI.IconButton"
              xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
-             xmlns:local="clr-namespace:RuneRepo"
+             xmlns:local="clr-namespace:RuneRepo.UI"
              mc:Ignorable="d" 
              d:DesignHeight="19" d:DesignWidth="19" Width="19" Height="19">
     <Grid x:Name="ButtonGrid" Background="Transparent" MouseLeftButtonDown="ButtonGrid_MouseLeftButtonDown" MouseLeftButtonUp="ButtonGrid_MouseLeftButtonUp" MouseEnter="ButtonGrid_MouseEnter">
