@@ -63,23 +63,23 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
-    <Page Include="IconButton.xaml">
+    <Page Include="UI\IconButton.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="MessagePopup.xaml">
+    <Page Include="UI\MessagePopup.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="NewRunePageItem.xaml">
+    <Page Include="UI\NewRunePageItem.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="RoundButton.xaml">
+    <Page Include="UI\RoundButton.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="RunePageItem.xaml">
+    <Page Include="UI\RunePageItem.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
@@ -95,22 +95,22 @@
     <Compile Include="ClientUx\ClientLocator.cs" />
     <Compile Include="ClientUx\GameflowPhaseMonitor.cs" />
     <Compile Include="ClientUx\RequestWrapper.cs" />
-    <Compile Include="IconButton.xaml.cs">
+    <Compile Include="UI\IconButton.xaml.cs">
       <DependentUpon>IconButton.xaml</DependentUpon>
     </Compile>
-    <Compile Include="MessagePopup.xaml.cs">
+    <Compile Include="UI\MessagePopup.xaml.cs">
       <DependentUpon>MessagePopup.xaml</DependentUpon>
     </Compile>
-    <Compile Include="NewRunePageItem.xaml.cs">
+    <Compile Include="UI\NewRunePageItem.xaml.cs">
       <DependentUpon>NewRunePageItem.xaml</DependentUpon>
     </Compile>
-    <Compile Include="RoundButton.xaml.cs">
+    <Compile Include="UI\RoundButton.xaml.cs">
       <DependentUpon>RoundButton.xaml</DependentUpon>
     </Compile>
-    <Compile Include="RunePageItem.xaml.cs">
+    <Compile Include="UI\RunePageItem.xaml.cs">
       <DependentUpon>RunePageItem.xaml</DependentUpon>
     </Compile>
-    <Compile Include="TextButton.xaml.cs">
+    <Compile Include="UI\TextButton.xaml.cs">
       <DependentUpon>TextButton.xaml</DependentUpon>
     </Compile>
     <Compile Include="Util\JsonUtil.cs" />
@@ -118,7 +118,7 @@
       <DependentUpon>MainWindow.xaml</DependentUpon>
       <SubType>Code</SubType>
     </Compile>
-    <Page Include="TextButton.xaml">
+    <Page Include="UI\TextButton.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
