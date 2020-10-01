@@ -40,10 +40,10 @@ namespace RuneRepo
             RunePagePanel.Children.Add(newRunePageItem);
             LoadRepo();
 
+            Wrapper = new RequestWrapper();
             Task.Factory.StartNew(async () =>
             {
                 await Task.Delay(3000);
-                Wrapper = new RequestWrapper();
                 PhaseMonitor = new GameflowPhaseMonitor(Wrapper);
                 PhaseMonitor.PhaseChanged += PhaseMonitor_PhaseChanged;
                 PhaseMonitor.Start();
