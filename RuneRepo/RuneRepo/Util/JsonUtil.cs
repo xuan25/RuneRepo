@@ -736,7 +736,15 @@ namespace JsonUtil
 
         #region Parser
 
-        public class Parser
+        public static JsonParser Parser
+        {
+            get
+            {
+                return new JsonParser();
+            }
+        }
+
+        public class JsonParser
         {
             #region Public methods
 
@@ -745,7 +753,7 @@ namespace JsonUtil
             /// </summary>
             /// <param name="json">The json text need to been parse</param>
             /// <returns>A json object or json array</returns>
-            public static Value Parse(string json)
+            public Value Parse(string json)
             {
                 if (json == null || string.IsNullOrWhiteSpace(json))
                     return null;
@@ -760,7 +768,7 @@ namespace JsonUtil
             /// </summary>
             /// <param name="stream">The json stream need to been parse</param>
             /// <returns>A json object or json array</returns>
-            public static Value Parse(Stream stream)
+            public Value Parse(Stream stream)
             {
                 if (stream == null)
                     return null;
@@ -788,13 +796,13 @@ namespace JsonUtil
 
             #region Private fileds
 
-            private static StringBuilder stringBuilder;
+            private StringBuilder stringBuilder;
 
             #endregion
 
             #region Private methods
 
-            private static Value StartParse(StreamReader streamReader)
+            private Value StartParse(StreamReader streamReader)
             {
                 int buffer = ReadNextMark(streamReader);
                 switch (buffer)
@@ -809,7 +817,7 @@ namespace JsonUtil
                 }
             }
 
-            private static Value ParseObject(StreamReader streamReader, out int endMark)
+            private Value ParseObject(StreamReader streamReader, out int endMark)
             {
                 Dictionary<string, Value> dic = new Dictionary<string, Value>();
                 while (true)
@@ -826,7 +834,7 @@ namespace JsonUtil
                 return dic;
             }
 
-            private static Value ParseArray(StreamReader streamReader, out int endMark)
+            private Value ParseArray(StreamReader streamReader, out int endMark)
             {
                 List<Value> list = new List<Value>();
                 while (true)
@@ -843,7 +851,7 @@ namespace JsonUtil
                 return list;
             }
 
-            private static void ParseKeyValuePaire(StreamReader streamReader, out string key, out Value value, out int endMark)
+            private void ParseKeyValuePaire(StreamReader streamReader, out string key, out Value value, out int endMark)
             {
                 key = ParseKey(streamReader, out int split, out bool success);
                 if (!success)
@@ -857,7 +865,7 @@ namespace JsonUtil
                 value = ParseValue(streamReader, out endMark, out _);
             }
 
-            private static string ParseKey(StreamReader streamReader, out int splitMark, out bool success)
+            private string ParseKey(StreamReader streamReader, out int splitMark, out bool success)
             {
                 stringBuilder.Clear();
                 int buffer = ReadNextMark(streamReader);
@@ -887,7 +895,16 @@ namespace JsonUtil
                                 case '"':
                                     splitMark = ReadNextMark(streamReader);
                                     success = true;
-                                    return Regex.Unescape(stringBuilder.ToString());
+                                    string result;
+                                    try
+                                    {
+                                        result = Regex.Unescape(stringBuilder.ToString());
+                                    }
+                                    catch (Exception)
+                                    {
+                                        result = stringBuilder.ToString();
+                                    }
+                                    return result;
                                 default:
                                     stringBuilder.Append((char)buffer);
                                     break;
@@ -898,7 +915,7 @@ namespace JsonUtil
                 }
             }
 
-            private static Value ParseValue(StreamReader streamReader, out int endMark, out bool success)
+            private Value ParseValue(StreamReader streamReader, out int endMark, out bool success)
             {
                 stringBuilder.Clear();
                 int buffer = ReadNextMark(streamReader);
@@ -934,7 +951,16 @@ namespace JsonUtil
                                 case '"':
                                     endMark = ReadNextMark(streamReader);
                                     success = true;
-                                    return Regex.Unescape(stringBuilder.ToString());
+                                    string result;
+                                    try
+                                    {
+                                        result = Regex.Unescape(stringBuilder.ToString());
+                                    }
+                                    catch (Exception)
+                                    {
+                                        result = stringBuilder.ToString();
+                                    }
+                                    return result;
                                 default:
                                     stringBuilder.Append((char)buffer);
                                     break;
@@ -977,7 +1003,7 @@ namespace JsonUtil
                 }
             }
 
-            private static int ReadNextMark(StreamReader streamReader)
+            private int ReadNextMark(StreamReader streamReader)
             {
                 int mark;
                 do
