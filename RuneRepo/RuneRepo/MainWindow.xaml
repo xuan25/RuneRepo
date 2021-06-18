@@ -38,7 +38,7 @@
 
             <Border Grid.Row="1" BorderBrush="#50ffffff" BorderThickness="0,1,0,0">
                 <Grid x:Name="MainViewGrid">
-                    <ScrollViewer HorizontalAlignment="Stretch" VerticalAlignment="Stretch" VerticalScrollBarVisibility="Auto" AllowDrop="True" DragOver="RunePageViewer_DragOver" UseLayoutRounding="True">
+                    <local:ExtendedScrollViewer HorizontalAlignment="Stretch" VerticalAlignment="Stretch" VerticalScrollBarVisibility="Auto" AllowDrop="True" DragOver="RunePageViewer_DragOver" UseLayoutRounding="True" SpeedFactor="2.55">
                         <ScrollViewer.Resources>
                             <Style x:Key="RepeatButtonTransparent" TargetType="{x:Type RepeatButton}">
                                 <Setter Property="OverridesDefaultStyle" Value="true"/>
@@ -302,7 +302,7 @@
                                 <Image x:Name="DragViewImage"/>
                             </Canvas>
                         </Grid>
-                    </ScrollViewer>
+                    </local:ExtendedScrollViewer>
                 </Grid>
             </Border>
         </Grid>
