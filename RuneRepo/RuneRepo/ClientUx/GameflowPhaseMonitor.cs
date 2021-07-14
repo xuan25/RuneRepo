@@ -57,7 +57,11 @@ namespace RuneRepo.ClientUx
                         }
                         LastPhase = phase;
                     }
-                    catch (RequestWrapper.NoClientException)
+                    catch (RequestWrapper.NoClientException ex)
+                    {
+
+                    }
+                    catch (System.Net.WebException ex)
                     {
 
                     }
