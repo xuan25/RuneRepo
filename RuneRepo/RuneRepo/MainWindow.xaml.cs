@@ -19,6 +19,7 @@ namespace RuneRepo
     /// </summary>
     public partial class MainWindow : Window
     {
+        private const float uiScaleFactor = 0.75f;
         private const string RepoFile = "repository.json";
         private const string ConfigFile = "config.json";
 
@@ -51,6 +52,9 @@ namespace RuneRepo
             LoadConfig();
 
             NewRunePageItem newRunePageItem = new NewRunePageItem();
+            newRunePageItem.Height *= uiScaleFactor;
+            newRunePageItem.Width *= uiScaleFactor;
+            newRunePageItem.Margin = new Thickness(newRunePageItem.Margin.Left * uiScaleFactor);
             newRunePageItem.StoreNew += NewRunePageItem_StoreNew;
             RunePagePanel.Children.Add(newRunePageItem);
             LoadRepo();
@@ -207,13 +211,16 @@ namespace RuneRepo
         private void AppendRunePage(Json.Value value)
         {
             RunePageItem runePageItem = new RunePageItem(value);
+            runePageItem.Height *= uiScaleFactor;
+            runePageItem.Width *= uiScaleFactor;
+            runePageItem.Margin = new Thickness(runePageItem.Margin.Left * uiScaleFactor);
             runePageItem.Apply += RunePageItem_Apply;
             runePageItem.Delete += RunePageItem_Delete;
             runePageItem.Updated += RunePageItem_Updated;
             runePageItem.MouseMove += RunePageItem_MouseMove;
             RunePagePanel.Children.Insert(RunePagePanel.Children.Count - 1, runePageItem);
 
-            Border border = new Border() { Height = 277, Width = 176, Margin = new Thickness(14), Background = new SolidColorBrush(Colors.Black)};
+            Border border = new Border() { Height = runePageItem.Height, Width = runePageItem.Width, Margin = runePageItem.Margin, Background = new SolidColorBrush(Colors.Black)};
             RunePagePanelDummy.Children.Add(border);
         }
 
