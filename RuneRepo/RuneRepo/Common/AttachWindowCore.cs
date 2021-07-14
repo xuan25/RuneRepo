@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Interop;
 
-namespace RuneRepo
+namespace Common
 {
     class AttachWindowCore
     {
@@ -51,7 +51,6 @@ namespace RuneRepo
             uint dwExStyle = Native.GetWindowLong(hwnd, (int)Native.WindowLongFlags.GWL_STYLE);
             dwExStyle &= ~(uint)Native.WindowStyles.WS_CHILDWINDOW;
             dwExStyle |= (uint)Native.WindowStyles.WS_CAPTION;
-            dwExStyle |= (uint)Native.WindowStyles.WS_THICKFRAME;
             Native.SetWindowLong(hwnd, (int)Native.WindowLongFlags.GWL_STYLE, dwExStyle);
 
             IsAttached = false;
@@ -62,12 +61,14 @@ namespace RuneRepo
             IntPtr hwnd = OwnerHwnd;
             IntPtr clientHwnd = GetClientHwnd();
 
-            if(clientHwnd != IntPtr.Zero)
+            Native.GetWindowRect(clientHwnd, out Native.RECT lpRect);
+            PositionOffset = new Point(lpRect.Left, lpRect.Top);
+
+            if (clientHwnd != IntPtr.Zero)
             {
                 uint dwExStyle = Native.GetWindowLong(hwnd, (int)Native.WindowLongFlags.GWL_STYLE);
                 dwExStyle |= (uint)Native.WindowStyles.WS_CHILDWINDOW;
                 dwExStyle &= ~(uint)Native.WindowStyles.WS_CAPTION;
-                dwExStyle &= ~(uint)Native.WindowStyles.WS_THICKFRAME;
                 Native.SetWindowLong(hwnd, (int)Native.WindowLongFlags.GWL_STYLE, dwExStyle);
 
                 Native.SetParent(hwnd, clientHwnd);
@@ -77,6 +78,17 @@ namespace RuneRepo
             }
 
             return IsAttached;
+        }
+
+        public Point PositionOffset { get; private set; } = new Point(0, 0);
+
+        public Rect GetClientWindowRect()
+        {
+            IntPtr clientHwnd = GetClientHwnd();
+            Native.GetWindowRect(clientHwnd, out Native.RECT lpRect);
+
+            Rect rect = new Rect(lpRect.Left, lpRect.Top, lpRect.Right - lpRect.Left, lpRect.Bottom - lpRect.Top);
+            return rect;
         }
 
         private IntPtr GetClientHwnd()
@@ -90,6 +102,8 @@ namespace RuneRepo
             IntPtr browserHwnd = Native.FindWindowEx(clientHwnd, IntPtr.Zero, "CefBrowserWindow", string.Empty);
             return browserHwnd;
         }
+
+        
 
         public class Native
         {
@@ -416,6 +430,9 @@ namespace RuneRepo
 
             [DllImport("user32.dll")]
             public static extern int SetWindowLong(IntPtr hWnd, int nIndex, uint dwNewLong);
+
+            [DllImport("user32.dll")]
+            public static extern bool GetWindowRect(IntPtr hWnd, out RECT lpRect);
         }
 
     }

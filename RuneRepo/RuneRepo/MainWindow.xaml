@@ -5,7 +5,7 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:RuneRepo"
         xmlns:b="http://schemas.microsoft.com/xaml/behaviors"
-    xmlns:ui="clr-namespace:RuneRepo.UI" x:Class="RuneRepo.MainWindow"
+        xmlns:ui="clr-namespace:RuneRepo.UI" x:Class="RuneRepo.MainWindow"
         mc:Ignorable="d"
         Title="RuneRepo" Height="450" Width="800" MinHeight="340" MinWidth="230">
     <WindowChrome.WindowChrome>

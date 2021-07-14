@@ -1,4 +1,5 @@
-﻿using JsonUtil;
+﻿using Common;
+using JsonUtil;
 using RuneRepo.ClientUx;
 using RuneRepo.UI;
 using System;
@@ -37,6 +38,10 @@ namespace RuneRepo
         {
             AttachCore = new AttachWindowCore();
             AttachCore.Init(this);
+            HotKey.Register(this, HotKey.Modifier.MOD_ALT | HotKey.Modifier.MOD_SHIFT, VirtualKey.KEY_R, out int id, () =>
+            {
+                this.WindowState = this.WindowState == WindowState.Minimized ? WindowState.Normal : WindowState.Minimized;
+            });
 
             base.OnSourceInitialized(e);
         }
@@ -61,6 +66,9 @@ namespace RuneRepo
             SaveConfig();
         }
 
+        Rect WndPosNormal = new Rect(0, 0, 230, 340);
+        Rect WndPosAttached = new Rect(0, 0, 230, 340);
+
         private void LoadConfig()
         {
             if (!File.Exists(ConfigFile))
@@ -70,24 +78,45 @@ namespace RuneRepo
             {
                 json = Json.Parser.Parse(fileStream);
             }
+
             if (json.Contains("width"))
-                this.Width = json["width"];
+                WndPosNormal.Width = json["width"];
             if (json.Contains("height"))
-                this.Height = json["height"];
+                WndPosNormal.Height = json["height"];
             if (json.Contains("left"))
-                this.Left = json["left"];
+                WndPosNormal.X = json["left"];
             if (json.Contains("top"))
-                this.Top = json["top"];
+                WndPosNormal.Y = json["top"];
+
+            if (json.Contains("width_attached"))
+                WndPosAttached.Width = json["width_attached"];
+            if (json.Contains("height_attached"))
+                WndPosAttached.Height = json["height_attached"];
+            if (json.Contains("left_attached"))
+                WndPosAttached.X = json["left_attached"];
+            if (json.Contains("top_attached"))
+                WndPosAttached.Y = json["top_attached"];
+
+            this.Width = WndPosNormal.Width;
+            this.Height = WndPosNormal.Height;
+            this.Left = WndPosNormal.Left;
+            this.Top = WndPosNormal.Top;
         }
 
         private void SaveConfig()
         {
+            WndPosNormal = new Rect(this.Left, this.Top, this.Width, this.Height);
+
             Json.Value.Object json = new Json.Value.Object(new System.Collections.Generic.Dictionary<string, Json.Value>
             {
-                { "width", this.Width },
-                { "height", this.Height },
-                { "left", this.Left },
-                { "top", this.Top }
+                { "width", WndPosNormal.Width },
+                { "height", WndPosNormal.Height },
+                { "left", WndPosNormal.Left },
+                { "top", WndPosNormal.Top },
+                { "width_attached", WndPosAttached.Width },
+                { "height_attached", WndPosAttached.Height },
+                { "left_attached", WndPosAttached.Left },
+                { "top_attached", WndPosAttached.Top },
             });
             using (FileStream fileStream = new FileStream(ConfigFile, FileMode.Create, FileAccess.Write))
             {
@@ -357,13 +386,30 @@ namespace RuneRepo
         {
             if (AttachCore.IsAttached)
             {
+                Rect clientRect = AttachCore.GetClientWindowRect();
+                WndPosAttached = new Rect(this.Left - AttachCore.PositionOffset.X, this.Top - AttachCore.PositionOffset.Y, this.Width, this.Height);
+
                 AttachCore.Detach();
                 MaximizeWindowBtn.Visibility = Visibility.Visible;
+
+                this.Width = WndPosNormal.Width;
+                this.Height = WndPosNormal.Height;
+                this.Left = WndPosNormal.Left;
+                this.Top = WndPosNormal.Top;
             }
             else
             {
+                WndPosNormal = new Rect(this.Left, this.Top, this.Width, this.Height);
+
                 AttachCore.AttachToClient();
                 MaximizeWindowBtn.Visibility = Visibility.Collapsed;
+
+                Rect clientRect = AttachCore.GetClientWindowRect();
+
+                this.Width = WndPosAttached.Width;
+                this.Height = WndPosAttached.Height;
+                this.Left = WndPosAttached.Left - clientRect.Left;
+                this.Top = WndPosAttached.Top;
             }
         }
     }
