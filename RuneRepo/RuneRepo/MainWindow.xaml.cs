@@ -24,11 +24,21 @@ namespace RuneRepo
         private RequestWrapper Wrapper = null;
         private GameflowPhaseMonitor PhaseMonitor = null;
 
+        private AttachWindowCore AttachCore;
+
         public MainWindow()
         {
             InitializeComponent();
             this.Loaded += MainWindow_Loaded;
             this.Closing += MainWindow_Closing;
+        }
+
+        protected override void OnSourceInitialized(EventArgs e)
+        {
+            AttachCore = new AttachWindowCore();
+            AttachCore.Init(this);
+
+            base.OnSourceInitialized(e);
         }
 
         private void MainWindow_Loaded(object sender, RoutedEventArgs e)
@@ -323,6 +333,10 @@ namespace RuneRepo
 
         private void CloseWindowBtn_Clicked(object sender, MouseButtonEventArgs e)
         {
+            if (AttachCore.IsAttached)
+            {
+                AttachCore.Detach();
+            }
             this.Close();
         }
 
@@ -337,6 +351,20 @@ namespace RuneRepo
         private void MinimizeWindowBtn_Clicked(object sender, MouseButtonEventArgs e)
         {
             this.WindowState = WindowState.Minimized;
+        }
+
+        private void AttachWindowBtn_Clicked(object sender, MouseButtonEventArgs e)
+        {
+            if (AttachCore.IsAttached)
+            {
+                AttachCore.Detach();
+                MaximizeWindowBtn.Visibility = Visibility.Visible;
+            }
+            else
+            {
+                AttachCore.AttachToClient();
+                MaximizeWindowBtn.Visibility = Visibility.Collapsed;
+            }
         }
     }
 }

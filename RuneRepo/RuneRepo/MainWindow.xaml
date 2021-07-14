@@ -33,6 +33,16 @@
                         </ui:IconButton.IconGeometry>
                     </ui:IconButton>
                     <ui:IconButton x:Name="MinimizeWindowBtn" Margin="5,0" Clicked="MinimizeWindowBtn_Clicked" IconGeometry="M5,13 L5,14 L14,14 L14,13 z"/>
+                    <ui:IconButton x:Name="AttachWindowBtn" Margin="5,0" Clicked="AttachWindowBtn_Clicked">
+                        <ui:IconButton.IconGeometry>
+                            <GeometryGroup>
+                                <PathGeometry Figures="M5,5 L14,5 L14,14 L5,14 z"/>
+                                <PathGeometry Figures="M6,6 L13,6 L13,13 L6,13 z"/>
+                                <PathGeometry Figures="M7,7 L12,7 L12,12 L7,12 z"/>
+                                <PathGeometry Figures="M8,8 L11,8 L11,11 L8,11 z"/>
+                            </GeometryGroup>
+                        </ui:IconButton.IconGeometry>
+                    </ui:IconButton>
                 </StackPanel>
             </Grid>
 
