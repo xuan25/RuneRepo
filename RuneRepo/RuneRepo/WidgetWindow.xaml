@@ -5,7 +5,7 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:RuneRepo"
         mc:Ignorable="d"
-        Title="WidgitWindow" Height="16" Width="16" WindowStyle="None" ResizeMode="NoResize" Background="#010A13">
+        Title="WidgitWindow" Height="16" Width="16" WindowStyle="None" ResizeMode="NoResize" Background="#01000000" AllowsTransparency="True">
     <Window.Resources>
         <Style x:Key="FocusVisual">
             <Setter Property="Control.Template">
@@ -64,7 +64,7 @@
         </Style>
     </Window.Resources>
     <Grid>
-        <Button x:Name="RestoreBtn" Click="RestoreBtn_Click" Style="{DynamicResource LeagueButtonStyle}">
+        <Button x:Name="RestoreBtn" Click="RestoreBtn_Click" Style="{DynamicResource LeagueButtonStyle}" Cursor="Hand">
             <Button.OpacityMask>
                 <VisualBrush>
                     <VisualBrush.Visual>

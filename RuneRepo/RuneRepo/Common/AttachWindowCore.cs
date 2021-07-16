@@ -11,6 +11,8 @@ namespace Common
 {
     class AttachWindowCore
     {
+        public event EventHandler<EventArgs> TargetLostDetached;
+
         public bool IsAttached { get; private set; } = false;
 
         private Window OwnerWindow;
@@ -34,6 +36,7 @@ namespace Common
                     {
                         handled = true;
                         Detach();
+                        TargetLostDetached?.Invoke(this, new EventArgs());
                     }
                     break;
             }

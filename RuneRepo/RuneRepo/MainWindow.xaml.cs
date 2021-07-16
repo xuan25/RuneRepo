@@ -40,6 +40,7 @@ namespace RuneRepo
         {
             AttachCore = new AttachWindowCore();
             AttachCore.Init(this);
+            AttachCore.TargetLostDetached += AttachCore_TargetLostDetached;
 
             HotKey.Register(this, HotKey.Modifier.MOD_ALT | HotKey.Modifier.MOD_SHIFT, VirtualKey.KEY_R, out int id, () =>
             {
@@ -396,60 +397,92 @@ namespace RuneRepo
             this.WindowState = WindowState.Minimized;
         }
 
+
+
         WidgetWindow Widget;
+
+        private void SetDetach()
+        {
+            IntPtr hwnd = new WindowInteropHelper(this).Handle;
+            uint dwExStyle = Native.GetWindowLong(hwnd, (int)Native.WindowLongFlags.GWL_STYLE);
+            dwExStyle &= ~(uint)Native.WindowStyles.WS_CHILDWINDOW;
+            dwExStyle |= (uint)Native.WindowStyles.WS_CAPTION;
+            Native.SetWindowLong(hwnd, (int)Native.WindowLongFlags.GWL_STYLE, dwExStyle);
+
+            WndPosAttached = new Rect(this.Left, this.Top, this.Width, this.Height);
+            this.Width = WndPosNormal.Width;
+            this.Height = WndPosNormal.Height;
+            this.Left = WndPosNormal.Left;
+            this.Top = WndPosNormal.Top;
+
+            MaximizeWindowBtn.Visibility = Visibility.Visible;
+        }
+
+        private void SetAttach()
+        {
+            WndPosNormal = new Rect(this.Left, this.Top, this.Width, this.Height);
+            this.Width = WndPosAttached.Width;
+            this.Height = WndPosAttached.Height;
+            this.Left = WndPosAttached.Left;
+            this.Top = WndPosAttached.Top;
+
+            IntPtr hwnd = new WindowInteropHelper(this).Handle;
+            uint dwExStyle = Native.GetWindowLong(hwnd, (int)Native.WindowLongFlags.GWL_STYLE);
+            dwExStyle |= (uint)Native.WindowStyles.WS_CHILDWINDOW;
+            dwExStyle &= ~(uint)Native.WindowStyles.WS_CAPTION;
+            Native.SetWindowLong(hwnd, (int)Native.WindowLongFlags.GWL_STYLE, dwExStyle);
+
+            MaximizeWindowBtn.Visibility = Visibility.Collapsed;
+        }
+
         private void AttachWindowBtn_Clicked(object sender, MouseButtonEventArgs e)
         {
             if (AttachCore.IsAttached)
             {
                 AttachCore.Detach();
 
-                IntPtr hwnd = new WindowInteropHelper(this).Handle;
-                uint dwExStyle = Native.GetWindowLong(hwnd, (int)Native.WindowLongFlags.GWL_STYLE);
-                dwExStyle &= ~(uint)Native.WindowStyles.WS_CHILDWINDOW;
-                dwExStyle |= (uint)Native.WindowStyles.WS_CAPTION;
-                Native.SetWindowLong(hwnd, (int)Native.WindowLongFlags.GWL_STYLE, dwExStyle);
-
-                WndPosAttached = new Rect(this.Left, this.Top, this.Width, this.Height);
-                this.Width = WndPosNormal.Width;
-                this.Height = WndPosNormal.Height;
-                this.Left = WndPosNormal.Left;
-                this.Top = WndPosNormal.Top;
-
-                MaximizeWindowBtn.Visibility = Visibility.Visible;
+                SetDetach();
 
                 // widget
-                Widget.Detach();
-                Widget.Close();
-                Widget = null;
+                Widget.Hide();
             }
             else
             {
-                WndPosNormal = new Rect(this.Left, this.Top, this.Width, this.Height);
-                this.Width = WndPosAttached.Width;
-                this.Height = WndPosAttached.Height;
-                this.Left = WndPosAttached.Left;
-                this.Top = WndPosAttached.Top;
+                SetAttach();
 
-                if (AttachCore.AttachToClient()){
-                    IntPtr hwnd = new WindowInteropHelper(this).Handle;
-                    uint dwExStyle = Native.GetWindowLong(hwnd, (int)Native.WindowLongFlags.GWL_STYLE);
-                    dwExStyle |= (uint)Native.WindowStyles.WS_CHILDWINDOW;
-                    dwExStyle &= ~(uint)Native.WindowStyles.WS_CAPTION;
-                    Native.SetWindowLong(hwnd, (int)Native.WindowLongFlags.GWL_STYLE, dwExStyle);
-
-                    MaximizeWindowBtn.Visibility = Visibility.Collapsed;
-
+                if (AttachCore.AttachToClient())
+                {
                     // widget
-                    Widget = new WidgetWindow(this);
-                    Widget.Show();
-                    Widget.AttachToClient();
+                    if (Widget == null)
+                    {
+                        Widget = new WidgetWindow(this);
+                        Widget.Show();
+                        Widget.AttachToClient();
 
-                    IntPtr hwndWidget = new WindowInteropHelper(Widget).Handle;
-                    uint dwExStyleWidget = Native.GetWindowLong(hwndWidget, (int)Native.WindowLongFlags.GWL_STYLE);
-                    dwExStyleWidget |= (uint)Native.WindowStyles.WS_CHILDWINDOW;
-                    Native.SetWindowLong(hwndWidget, (int)Native.WindowLongFlags.GWL_STYLE, dwExStyleWidget);
+                        IntPtr hwndWidget = new WindowInteropHelper(Widget).Handle;
+                        uint dwExStyleWidget = Native.GetWindowLong(hwndWidget, (int)Native.WindowLongFlags.GWL_STYLE);
+                        dwExStyleWidget |= (uint)Native.WindowStyles.WS_CHILDWINDOW;
+                        Native.SetWindowLong(hwndWidget, (int)Native.WindowLongFlags.GWL_STYLE, dwExStyleWidget);
+                    }
+                    else
+                    {
+                        Widget.Show();
+                    }
+                }
+                else
+                {
+                    SetDetach();
                 }
             }
         }
+
+        private void AttachCore_TargetLostDetached(object sender, EventArgs e)
+        {
+            Widget.Close();
+            Widget = null;
+
+            SetDetach();
+        }
+
     }
 }
