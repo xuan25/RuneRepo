@@ -393,30 +393,28 @@ namespace RuneRepo
         {
             if (AttachCore.IsAttached)
             {
-                Rect clientRect = AttachCore.GetClientWindowRect();
-                WndPosAttached = new Rect(this.Left - AttachCore.PositionOffset.X, this.Top - AttachCore.PositionOffset.Y, this.Width, this.Height);
-
                 AttachCore.Detach();
-                MaximizeWindowBtn.Visibility = Visibility.Visible;
 
+                WndPosAttached = new Rect(this.Left, this.Top, this.Width, this.Height);
                 this.Width = WndPosNormal.Width;
                 this.Height = WndPosNormal.Height;
                 this.Left = WndPosNormal.Left;
                 this.Top = WndPosNormal.Top;
+                MaximizeWindowBtn.Visibility = Visibility.Visible;
             }
             else
             {
                 WndPosNormal = new Rect(this.Left, this.Top, this.Width, this.Height);
 
-                AttachCore.AttachToClient();
-                MaximizeWindowBtn.Visibility = Visibility.Collapsed;
 
-                Rect clientRect = AttachCore.GetClientWindowRect();
 
                 this.Width = WndPosAttached.Width;
                 this.Height = WndPosAttached.Height;
-                this.Left = WndPosAttached.Left - clientRect.Left;
+                this.Left = WndPosAttached.Left;
                 this.Top = WndPosAttached.Top;
+                if (AttachCore.AttachToClient()){
+                    MaximizeWindowBtn.Visibility = Visibility.Collapsed;
+                }
             }
         }
     }

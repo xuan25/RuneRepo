@@ -66,8 +66,6 @@ namespace Common
                 Native.ShowWindow(clientHwnd, (int)Native.ShowWindowCommands.Normal);
                 Native.SetForegroundWindow(clientHwnd);
 
-                Native.GetWindowRect(clientHwnd, out Native.RECT lpRect);
-                PositionOffset = new Point(lpRect.Left, lpRect.Top);
 
                 uint dwExStyle = Native.GetWindowLong(hwnd, (int)Native.WindowLongFlags.GWL_STYLE);
                 dwExStyle |= (uint)Native.WindowStyles.WS_CHILDWINDOW;
@@ -83,7 +81,6 @@ namespace Common
             return IsAttached;
         }
 
-        public Point PositionOffset { get; private set; } = new Point(0, 0);
 
         public Rect GetClientWindowRect()
         {
