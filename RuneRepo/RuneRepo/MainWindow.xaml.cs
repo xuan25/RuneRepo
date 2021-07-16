@@ -10,6 +10,7 @@ using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
+using System.Windows.Interop;
 using System.Windows.Media;
 
 namespace RuneRepo
@@ -39,6 +40,7 @@ namespace RuneRepo
         {
             AttachCore = new AttachWindowCore();
             AttachCore.Init(this);
+
             HotKey.Register(this, HotKey.Modifier.MOD_ALT | HotKey.Modifier.MOD_SHIFT, VirtualKey.KEY_R, out int id, () =>
             {
                 this.WindowState = this.WindowState == WindowState.Minimized ? WindowState.Normal : WindowState.Minimized;
@@ -68,6 +70,8 @@ namespace RuneRepo
         private void MainWindow_Closing(object sender, System.ComponentModel.CancelEventArgs e)
         {
             SaveConfig();
+
+            Application.Current.Shutdown();
         }
 
         Rect WndPosNormal = new Rect(0, 0, 230, 340);
@@ -372,6 +376,9 @@ namespace RuneRepo
             if (AttachCore.IsAttached)
             {
                 AttachCore.Detach();
+                Widget.Detach();
+                Widget.Close();
+                Widget = null;
             }
             this.Close();
         }
@@ -389,31 +396,58 @@ namespace RuneRepo
             this.WindowState = WindowState.Minimized;
         }
 
+        WidgetWindow Widget;
         private void AttachWindowBtn_Clicked(object sender, MouseButtonEventArgs e)
         {
             if (AttachCore.IsAttached)
             {
                 AttachCore.Detach();
 
+                IntPtr hwnd = new WindowInteropHelper(this).Handle;
+                uint dwExStyle = Native.GetWindowLong(hwnd, (int)Native.WindowLongFlags.GWL_STYLE);
+                dwExStyle &= ~(uint)Native.WindowStyles.WS_CHILDWINDOW;
+                dwExStyle |= (uint)Native.WindowStyles.WS_CAPTION;
+                Native.SetWindowLong(hwnd, (int)Native.WindowLongFlags.GWL_STYLE, dwExStyle);
+
                 WndPosAttached = new Rect(this.Left, this.Top, this.Width, this.Height);
                 this.Width = WndPosNormal.Width;
                 this.Height = WndPosNormal.Height;
                 this.Left = WndPosNormal.Left;
                 this.Top = WndPosNormal.Top;
+
                 MaximizeWindowBtn.Visibility = Visibility.Visible;
+
+                // widget
+                Widget.Detach();
+                Widget.Close();
+                Widget = null;
             }
             else
             {
                 WndPosNormal = new Rect(this.Left, this.Top, this.Width, this.Height);
-
-
-
                 this.Width = WndPosAttached.Width;
                 this.Height = WndPosAttached.Height;
                 this.Left = WndPosAttached.Left;
                 this.Top = WndPosAttached.Top;
+
                 if (AttachCore.AttachToClient()){
+                    IntPtr hwnd = new WindowInteropHelper(this).Handle;
+                    uint dwExStyle = Native.GetWindowLong(hwnd, (int)Native.WindowLongFlags.GWL_STYLE);
+                    dwExStyle |= (uint)Native.WindowStyles.WS_CHILDWINDOW;
+                    dwExStyle &= ~(uint)Native.WindowStyles.WS_CAPTION;
+                    Native.SetWindowLong(hwnd, (int)Native.WindowLongFlags.GWL_STYLE, dwExStyle);
+
                     MaximizeWindowBtn.Visibility = Visibility.Collapsed;
+
+                    // widget
+                    Widget = new WidgetWindow(this);
+                    Widget.Show();
+                    Widget.AttachToClient();
+
+                    IntPtr hwndWidget = new WindowInteropHelper(Widget).Handle;
+                    uint dwExStyleWidget = Native.GetWindowLong(hwndWidget, (int)Native.WindowLongFlags.GWL_STYLE);
+                    dwExStyleWidget |= (uint)Native.WindowStyles.WS_CHILDWINDOW;
+                    Native.SetWindowLong(hwndWidget, (int)Native.WindowLongFlags.GWL_STYLE, dwExStyleWidget);
                 }
             }
         }
