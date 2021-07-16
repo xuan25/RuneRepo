@@ -404,10 +404,10 @@ namespace RuneRepo
         private void SetDetach()
         {
             IntPtr hwnd = new WindowInteropHelper(this).Handle;
-            uint dwExStyle = Native.GetWindowLong(hwnd, (int)Native.WindowLongFlags.GWL_STYLE);
-            dwExStyle &= ~(uint)Native.WindowStyles.WS_CHILDWINDOW;
-            dwExStyle |= (uint)Native.WindowStyles.WS_CAPTION;
-            Native.SetWindowLong(hwnd, (int)Native.WindowLongFlags.GWL_STYLE, dwExStyle);
+            uint dwStyle = Native.GetWindowLong(hwnd, (int)Native.WindowLongFlags.GWL_STYLE);
+            dwStyle &= ~(uint)Native.WindowStyles.WS_CHILDWINDOW;
+            dwStyle |= (uint)Native.WindowStyles.WS_CAPTION;
+            Native.SetWindowLong(hwnd, (int)Native.WindowLongFlags.GWL_STYLE, dwStyle);
 
             WndPosAttached = new Rect(this.Left, this.Top, this.Width, this.Height);
             this.Width = WndPosNormal.Width;
@@ -427,10 +427,10 @@ namespace RuneRepo
             this.Top = WndPosAttached.Top;
 
             IntPtr hwnd = new WindowInteropHelper(this).Handle;
-            uint dwExStyle = Native.GetWindowLong(hwnd, (int)Native.WindowLongFlags.GWL_STYLE);
-            dwExStyle |= (uint)Native.WindowStyles.WS_CHILDWINDOW;
-            dwExStyle &= ~(uint)Native.WindowStyles.WS_CAPTION;
-            Native.SetWindowLong(hwnd, (int)Native.WindowLongFlags.GWL_STYLE, dwExStyle);
+            uint dwStyle = Native.GetWindowLong(hwnd, (int)Native.WindowLongFlags.GWL_STYLE);
+            dwStyle |= (uint)Native.WindowStyles.WS_CHILDWINDOW;
+            dwStyle &= ~(uint)Native.WindowStyles.WS_CAPTION;
+            Native.SetWindowLong(hwnd, (int)Native.WindowLongFlags.GWL_STYLE, dwStyle);
 
             MaximizeWindowBtn.Visibility = Visibility.Collapsed;
         }
@@ -444,25 +444,32 @@ namespace RuneRepo
                 SetDetach();
 
                 // widget
+
+                // TODO : Weird behaviour when transparent window attached the second time. So hide it for now. 
+                // Need restart the software to attach to a new client window
                 Widget.Hide();
+                //Widget.Close();
+                //Widget = null;
             }
             else
             {
                 SetAttach();
 
-                if (AttachCore.AttachToClient())
+                if (AttachCore.AttachToClient(true))
                 {
                     // widget
                     if (Widget == null)
                     {
                         Widget = new WidgetWindow(this);
                         Widget.Show();
-                        Widget.AttachToClient();
 
                         IntPtr hwndWidget = new WindowInteropHelper(Widget).Handle;
-                        uint dwExStyleWidget = Native.GetWindowLong(hwndWidget, (int)Native.WindowLongFlags.GWL_STYLE);
-                        dwExStyleWidget |= (uint)Native.WindowStyles.WS_CHILDWINDOW;
-                        Native.SetWindowLong(hwndWidget, (int)Native.WindowLongFlags.GWL_STYLE, dwExStyleWidget);
+                        uint dwStyleWidget = Native.GetWindowLong(hwndWidget, (int)Native.WindowLongFlags.GWL_STYLE);
+                        dwStyleWidget |= (uint)Native.WindowStyles.WS_CHILDWINDOW;
+                        Native.SetWindowLong(hwndWidget, (int)Native.WindowLongFlags.GWL_STYLE, dwStyleWidget);
+
+                        Widget.AttachToClient();
+                        AttachCore.AttachToClient();
                     }
                     else
                     {
@@ -474,6 +481,7 @@ namespace RuneRepo
                     SetDetach();
                 }
             }
+
         }
 
         private void AttachCore_TargetLostDetached(object sender, EventArgs e)

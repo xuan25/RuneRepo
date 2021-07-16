@@ -54,15 +54,18 @@ namespace Common
             IsAttached = false;
         }
 
-        public bool AttachToClient()
+        public bool AttachToClient(bool activeTarget = false)
         {
             IntPtr hwnd = OwnerHwnd;
             IntPtr clientHwnd = GetClientHwnd();
 
             if (clientHwnd != IntPtr.Zero)
             {
-                Native.ShowWindow(clientHwnd, (int)Native.ShowWindowCommands.Normal);
-                Native.SetForegroundWindow(clientHwnd);
+                if (activeTarget)
+                {
+                    Native.ShowWindow(clientHwnd, (int)Native.ShowWindowCommands.Normal);
+                    Native.SetForegroundWindow(clientHwnd);
+                }
 
                 Native.SetParent(hwnd, clientHwnd);
                 IsAttached = true;
@@ -73,7 +76,7 @@ namespace Common
             return IsAttached;
         }
 
-        private IntPtr GetClientHwnd()
+        public IntPtr GetClientHwnd()
         {
             IntPtr clientHwnd = Native.FindWindow("RCLIENT", "League of Legends");
             return clientHwnd;
@@ -88,7 +91,7 @@ namespace Common
             return rect;
         }
 
-        private IntPtr GetClientBrowserHwnd(IntPtr clientHwnd)
+        public IntPtr GetClientBrowserHwnd(IntPtr clientHwnd)
         {
             IntPtr browserHwnd = Native.FindWindowEx(clientHwnd, IntPtr.Zero, "CefBrowserWindow", string.Empty);
             return browserHwnd;
