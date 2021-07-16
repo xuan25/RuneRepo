@@ -22,6 +22,7 @@ namespace RuneRepo
     {
         Window MainWindow { get; set; }
         private AttachWindowCore AttachCore;
+        public event EventHandler<EventArgs> TargetLostDetached;
 
         public WidgetWindow(Window mainWindow)
         {
@@ -45,7 +46,13 @@ namespace RuneRepo
         {
             AttachCore = new AttachWindowCore();
             AttachCore.Init(this);
+            AttachCore.TargetLostDetached += AttachCore_TargetLostDetached;
             base.OnSourceInitialized(e);
+        }
+
+        private void AttachCore_TargetLostDetached(object sender, EventArgs e)
+        {
+            TargetLostDetached?.Invoke(sender, e);
         }
 
         public void AttachToClient()

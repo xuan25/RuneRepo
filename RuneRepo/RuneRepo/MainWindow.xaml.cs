@@ -461,6 +461,7 @@ namespace RuneRepo
                     if (Widget == null)
                     {
                         Widget = new WidgetWindow(this);
+                        Widget.TargetLostDetached += Widget_TargetLostDetached;
                         Widget.Show();
 
                         IntPtr hwndWidget = new WindowInteropHelper(Widget).Handle;
@@ -486,10 +487,18 @@ namespace RuneRepo
 
         private void AttachCore_TargetLostDetached(object sender, EventArgs e)
         {
-            Widget.Close();
-            Widget = null;
+            // TODO : Weird behaviour when transparent window attached the second time. So exit when current attached client lost.
 
-            SetDetach();
+            //Widget.Close();
+            //Widget = null;
+
+            //SetDetach();
+        }
+
+        private void Widget_TargetLostDetached(object sender, EventArgs e)
+        {
+            // TODO : Weird behaviour when transparent window attached the second time. So exit when current attached client lost.
+            this.Close();
         }
 
     }
