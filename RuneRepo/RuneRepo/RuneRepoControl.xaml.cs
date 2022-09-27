@@ -45,14 +45,14 @@ namespace RuneRepo
             RunePagePanel.Children.Add(newRunePageItem);
         }
 
-        public void LoadRepo()
+        public void LoadRepo(System.Windows.Threading.DispatcherPriority dispatcherPriority = System.Windows.Threading.DispatcherPriority.Normal)
         {
             if (!File.Exists(RepoFile))
             {
                 Dispatcher.Invoke(() =>
                 {
                     InitRunePage();
-                });
+                }, dispatcherPriority);
                 return;
             }
 
@@ -64,14 +64,14 @@ namespace RuneRepo
                 Dispatcher.Invoke(() =>
                 {
                     InitRunePage();
-                });
+                }, dispatcherPriority);
 
                 foreach (Json.Value value in runePageArray)
                 {
                     Dispatcher.Invoke(() =>
                     {
                         AppendRunePage(value);
-                    });
+                    }, dispatcherPriority);
                 }
             }
         }

@@ -1,4 +1,4 @@
-using Common;
+﻿using Common;
 using JsonUtil;
 using RuneRepo.ClientUx;
 using RuneRepo.UI;
@@ -94,9 +94,9 @@ namespace RuneRepo
                 {
                     repoControl = new RuneRepoControl(Wrapper);
                     RepoControl = repoControl;
-                });
+                }, System.Windows.Threading.DispatcherPriority.Loaded);
 
-                repoControl.LoadRepo();
+                repoControl.LoadRepo(System.Windows.Threading.DispatcherPriority.Loaded);
             });
         }
 
