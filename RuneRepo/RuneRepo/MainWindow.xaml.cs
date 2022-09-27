@@ -52,20 +52,15 @@ namespace RuneRepo
 
         private void MainWindow_Loaded(object sender, RoutedEventArgs e)
         {
-            LoadConfig();
+            Task.Run(() =>
+            {
+                LoadRepo();
 
-            NewRunePageItem newRunePageItem = new NewRunePageItem();
-            newRunePageItem.Height *= uiScaleFactor;
-            newRunePageItem.Width *= uiScaleFactor;
-            newRunePageItem.Margin = new Thickness(newRunePageItem.Margin.Left * uiScaleFactor);
-            newRunePageItem.StoreNew += NewRunePageItem_StoreNew;
-            RunePagePanel.Children.Add(newRunePageItem);
-            LoadRepo();
-
-            Wrapper = new RequestWrapper();
-            PhaseMonitor = new GameflowPhaseMonitor(Wrapper);
-            PhaseMonitor.PhaseChanged += PhaseMonitor_PhaseChanged;
-            PhaseMonitor.Start();
+                Wrapper = new RequestWrapper();
+                PhaseMonitor = new GameflowPhaseMonitor(Wrapper);
+                PhaseMonitor.PhaseChanged += PhaseMonitor_PhaseChanged;
+                PhaseMonitor.Start();
+            });
         }
 
         private void MainWindow_Closing(object sender, System.ComponentModel.CancelEventArgs e)
@@ -78,7 +73,7 @@ namespace RuneRepo
         Rect WndPosNormal = new Rect(0, 0, 230, 340);
         Rect WndPosAttached = new Rect(0, 0, 230, 340);
 
-        private void LoadConfig()
+        public void LoadConfig()
         {
             if (!File.Exists(ConfigFile))
                 return;
@@ -135,17 +130,43 @@ namespace RuneRepo
             }
         }
 
+        private void InitRunePage()
+        {
+            NewRunePageItem newRunePageItem = new NewRunePageItem();
+            newRunePageItem.Height *= uiScaleFactor;
+            newRunePageItem.Width *= uiScaleFactor;
+            newRunePageItem.Margin = new Thickness(newRunePageItem.Margin.Left * uiScaleFactor);
+            newRunePageItem.StoreNew += NewRunePageItem_StoreNew;
+            RunePagePanel.Children.Add(newRunePageItem);
+        }
+
         private void LoadRepo()
         {
             if (!File.Exists(RepoFile))
+            {
+                Dispatcher.Invoke(() =>
+                {
+                    InitRunePage();
+                });
                 return;
+            }
+                
             using (StreamReader streamReader = new StreamReader(RepoFile))
             {
                 string config = streamReader.ReadToEnd();
                 Json.Value runePageArray = Json.Parser.Parse(config);
+
+                Dispatcher.Invoke(() =>
+                {
+                    InitRunePage();
+                });
+
                 foreach (Json.Value value in runePageArray)
                 {
-                    AppendRunePage(value);
+                    Dispatcher.Invoke(() =>
+                    {
+                        AppendRunePage(value);
+                    });
                 }
             }
         }
