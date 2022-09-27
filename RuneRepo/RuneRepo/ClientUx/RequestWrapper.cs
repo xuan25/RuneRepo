@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 
 namespace RuneRepo.ClientUx
 {
-    class RequestWrapper
+    public class RequestWrapper
     {
         private AuthUtil Auth;
 

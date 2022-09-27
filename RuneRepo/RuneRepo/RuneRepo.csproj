@@ -68,6 +68,10 @@
     <Compile Include="ExtendedScrollViewer.cs" />
     <Compile Include="Common\AttachWindowCore.cs" />
     <Compile Include="Common\VirtualKey.cs" />
+    <Page Include="RuneRepoControl.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="WidgetWindow.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
@@ -105,6 +109,9 @@
     <Compile Include="ClientUx\GameflowPhaseMonitor.cs" />
     <Compile Include="ClientUx\RequestWrapper.cs" />
     <Compile Include="Common\HotKey.cs" />
+    <Compile Include="RuneRepoControl.xaml.cs">
+      <DependentUpon>RuneRepoControl.xaml</DependentUpon>
+    </Compile>
     <Compile Include="WidgetWindow.xaml.cs">
       <DependentUpon>WidgetWindow.xaml</DependentUpon>
     </Compile>
