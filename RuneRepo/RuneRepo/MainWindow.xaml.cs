@@ -12,6 +12,7 @@ using System.Windows.Controls;
 using System.Windows.Input;
 using System.Windows.Interop;
 using System.Windows.Media;
+using System.Windows.Media.Imaging;
 
 namespace RuneRepo
 {
@@ -59,11 +60,29 @@ namespace RuneRepo
             set => SetValue(RepoControlProperty, value);
         }
 
+        public static readonly DependencyProperty BackgroundImageProperty = DependencyProperty.Register(
+            "BackgroundImage", typeof(BitmapSource),
+            typeof(MainWindow)
+            );
+
+        public BitmapSource BackgroundImage
+        {
+            get => (BitmapSource)GetValue(BackgroundImageProperty);
+            set => SetValue(BackgroundImageProperty, value);
+        }
+
         private void MainWindow_Loaded(object sender, RoutedEventArgs e)
         {
-            Task.Run(() =>
+            Task.Factory.StartNew(() =>
             {
-
+                Dispatcher.Invoke(() =>
+                {
+                    BitmapImage background = new BitmapImage();
+                    background.BeginInit();
+                    background.UriSource = new Uri("pack://application:,,,/images/backdrop-magic.png", UriKind.RelativeOrAbsolute);
+                    background.EndInit();
+                    BackgroundImage = background;
+                }, System.Windows.Threading.DispatcherPriority.Loaded);
 
                 Wrapper = new RequestWrapper();
                 PhaseMonitor = new GameflowPhaseMonitor(Wrapper);
